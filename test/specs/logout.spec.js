@@ -1,6 +1,8 @@
 const LoginPage = require('../pageobjects/login.page');
 const LogoutPage = require('../pageobjects/logout.page');
 require('dotenv').config();
+const chai = require('chai');
+chai.should();
 
 const TEST_USER = {
     email: process.env.TEST_EMAIL,    
@@ -46,18 +48,22 @@ describe('Trello Session Management', () => {
             }
         );
         
+        const url = await browser.getUrl();
+        url.should.include('trello.com/home');
+        
         await browser.url(userBoardsUrl);
         
         const errorHeader = await $('h1');
         await errorHeader.waitForExist({ timeout: 10000 });
         
         const errorText = await errorHeader.getText();
-
         const expectedMessages = ['Page not found.', 'Página no encontrada.'];
-        const messageMatches = expectedMessages.some(msg => errorText === msg);
+        
+        errorText.should.be.oneOf(expectedMessages);
+        
+        const isErrorDisplayed = await errorHeader.isDisplayed();
+        isErrorDisplayed.should.be.true;
         
         console.log(`Error message found: "${errorText}"`);
-        await expect(messageMatches).toBe(true, 
-          `Error message "${errorText}" doesn't match any of the expected messages: ${expectedMessages.join(' or ')}`);
     });
 });

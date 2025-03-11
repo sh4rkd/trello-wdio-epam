@@ -10,10 +10,7 @@
     "test:headless": "wdio run wdio.conf.js",
     "test:login": "wdio run wdio.conf.js --spec ./test/specs/login.spec.js",
     "test:signup": "wdio run wdio.conf.js --spec ./test/specs/signup.spec.js",
-    "test:board": "wdio run wdio.conf.js --spec ./test/specs/board.spec.js",
-    "test:card": "wdio run wdio.conf.js --spec ./test/specs/card.spec.js",
     "test:profile": "wdio run wdio.conf.js --spec ./test/specs/profile.spec.js",
-    "test:workspace": "wdio run wdio.conf.js --spec ./test/specs/workspace.spec.js",
     "test:logout": "wdio run wdio.conf.js --spec ./test/specs/logout.spec.js",
     "test:parallel": "wdio run wdio.conf.js --maxInstances=2"
   },
@@ -31,6 +28,7 @@
     "@wdio/local-runner": "^7.16.12",
     "@wdio/mocha-framework": "^7.16.11",
     "@wdio/spec-reporter": "^7.16.11",
+    "chai": "^4.3.7",
     "chromedriver": "latest",
     "dotenv": "^16.4.7",
     "geckodriver": "latest",

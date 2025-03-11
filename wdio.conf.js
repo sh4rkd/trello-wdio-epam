@@ -2,9 +2,8 @@ exports.config = {
   runner: "local",
   specs: ["./test/specs/**/*.js"],
   exclude: [],
-  maxInstances: 2, // For parallel execution
+  maxInstances: 2,
   
-  // Define browser configurations separately
   capabilities: [{
     browserName: 'chrome',
     // 'goog:chromeOptions': {
@@ -14,9 +13,6 @@ exports.config = {
     acceptInsecureCerts: true
   }],
   
-  // Add separate Firefox configuration
-  // Firefox will be used when running with --spec.firefox
-  // This ensures the capabilities object is not completely overwritten
   firefox: {
     capabilities: [{
       browserName: 'firefox',
@@ -28,8 +24,7 @@ exports.config = {
     }]
   },
   
-  // Reduce console output with these settings
-  logLevel: "error", // Changed from "info" to "error" to show only errors
+  logLevel: "error",
   bail: 0,
   baseUrl: "https://trello.com",
   waitforTimeout: 10000,
@@ -44,16 +39,15 @@ exports.config = {
   ],
   
   framework: "mocha",
-  specFileRetries: 2, // Retry failed tests 2 times
+  specFileRetries: 2,
   specFileRetriesDelay: 0,
   specFileRetriesDeferred: false,
   
-  // Change reporter configuration to be less verbose
   reporters: [
     ['spec', {
-      showPreface: false,       // Hide preface text
-      addConsoleLogs: false,    // Don't add browser console logs
-      realtimeReporting: false, // Only report at end of tests
+      showPreface: false,
+      addConsoleLogs: false,
+      realtimeReporting: false,
       symbols: {
         passed: '✓',
         failed: '✖',
@@ -69,7 +63,6 @@ exports.config = {
   },
 
   before: function (capabilities, specs) {
-    // Only maximize window if not in headless mode
     if ((!capabilities['goog:chromeOptions'] || 
         !capabilities['goog:chromeOptions'].args || 
         !capabilities['goog:chromeOptions'].args.includes('--headless')) && 
@@ -79,10 +72,8 @@ exports.config = {
       browser.maximizeWindow();
     }
     
-    // Set window size (already set in headless chrome options)
     browser.setWindowSize(1920, 1080);
     
-    // Silence console logging in the browser
     browser.execute(() => {
       console.defaultLog = console.log.bind(console);
       console.log = function() {};
@@ -93,20 +84,21 @@ exports.config = {
       console.defaultInfo = console.info.bind(console);
       console.info = function() {};
     });
+    
+    // We're keeping this, but now also importing directly in each test file
+    const chai = require('chai');
+    global.assert = chai.assert;
+    global.should = chai.should();
+    global.expect = chai.expect;
   },
   
-  // Suppress WebDriver initialization logs
   beforeSession: function (config, capabilities, specs) {
     process.env.WDIO_SUPPRESS_WELCOME = true;
   },
   
-  // Handle browser-specific configurations via command line arguments
   onPrepare: function (config, capabilities) {
-    // Check if --spec.firefox is provided
     if (process.argv.includes('--spec.firefox')) {
-      // Replace capabilities with Firefox configuration
       config.capabilities = config.firefox.capabilities;
     }
-    // Additional logic for other browsers can go here
   }
 };

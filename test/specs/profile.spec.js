@@ -1,6 +1,8 @@
 const LoginPage = require('../pageobjects/login.page');
 const ProfilePage = require('../pageobjects/profile.page');
 require('dotenv').config();
+const chai = require('chai');
+const expect = chai.expect;
 
 const TEST_USER = {
     email: process.env.TEST_EMAIL,    
@@ -40,8 +42,14 @@ describe('Trello Profile Management', () => {
         );
         
         console.log('URL verified correctly');
+
+        await ProfilePage.profileForm.waitForDisplayed({ timeout: 10000 });
         
-        await expect(ProfilePage.profileForm).toBeDisplayed();
+        const isFormDisplayed = await ProfilePage.profileForm.isDisplayed();
+        expect(isFormDisplayed).to.be.true;
+        
+        const url = await browser.getUrl();
+        expect(url).to.include(`/u/${currentUsername}`);
         
         console.log('Navigation test completed successfully');
         
@@ -63,7 +71,8 @@ describe('Trello Profile Management', () => {
         
         await ProfilePage.savedConfirmation.waitForDisplayed({ timeout: 10000 });
         const confirmationMessage = await ProfilePage.savedConfirmation.getText();
-        expect(confirmationMessage).toContain('Saved');
+        
+        expect(confirmationMessage).to.contain('Saved');
         
         await browser.waitUntil(
             async () => (await browser.getUrl()).includes(newUsername),
@@ -76,6 +85,9 @@ describe('Trello Profile Management', () => {
         console.log(`Username successfully updated to: ${newUsername}`);
         
         currentUsername = newUsername;
+        
+        const url = await browser.getUrl();
+        expect(url).to.include(newUsername);
         
         await browser.url('https://trello.com/');
         await browser.pause(1000);
@@ -96,9 +108,9 @@ describe('Trello Profile Management', () => {
         const errorMessage = await ProfilePage.getErrorMessage();
         
         const expectedMessages = ['Username is taken', 'Este nombre de usuario ya existe'];
-        const messageMatches = expectedMessages.some(msg => errorMessage.includes(msg));
-        expect(messageMatches).toBe(true, 
-          `Error message "${errorMessage}" doesn't match any of the expected messages`);
+        expect(errorMessage).to.satisfy(msg => {
+            return expectedMessages.some(expected => msg.includes(expected));
+        });
         
         console.log(`Existing username test completed successfully`);
         
@@ -119,7 +131,7 @@ describe('Trello Profile Management', () => {
         
         await ProfilePage.savedConfirmation.waitForDisplayed({ timeout: 10000 });
         const confirmationMessage = await ProfilePage.savedConfirmation.getText();
-        expect(confirmationMessage).toContain('Saved');
+        expect(confirmationMessage).to.contain('Saved');
         
         console.log('Bio updated successfully');
     });

@@ -1,5 +1,7 @@
 const LoginPage = require('../pageobjects/login.page');
 require('dotenv').config();
+const chai = require('chai');
+const assert = chai.assert;
 
 const TEST_USER = {
     email: process.env.TEST_EMAIL,    
@@ -26,6 +28,11 @@ describe('Trello Login', () => {
         await LoginPage.loginSubmitButton.click();
         
         await LoginPage.boardDashboard.waitForDisplayed({ timeout: 10000 });
-        await expect(LoginPage.boardDashboard).toBeDisplayed();
+        
+        const isDisplayed = await LoginPage.boardDashboard.isDisplayed();
+        assert.isTrue(isDisplayed, 'Dashboard should be visible after login');
+        
+        const currentUrl = await browser.getUrl();
+        assert.include(currentUrl, 'trello.com', 'URL should include trello.com');
     });
 });

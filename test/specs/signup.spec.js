@@ -1,4 +1,8 @@
 const SignupPage = require('../pageobjects/signup.page');
+const chai = require('chai');
+const assert = chai.assert;
+const expect = chai.expect;
+chai.should();
 
 function generateRandomEmail() {
     return `test${Math.floor(Math.random() * 10000)}@example.tesssti.com`;
@@ -14,7 +18,10 @@ describe('Trello User Registration', () => {
         await SignupPage.signupButton.click();
         
         await SignupPage.signupPage.waitForDisplayed({ timeout: 5000 });
-        await expect(SignupPage.signupPage).toBeDisplayed();
+        
+        // Using Assert interface
+        const isDisplayed = await SignupPage.signupPage.isDisplayed();
+        assert.isTrue(isDisplayed, 'Signup page should be displayed');
     });
 
     it('first registration attempt (triggers reCAPTCHA)', async () => {
@@ -25,7 +32,9 @@ describe('Trello User Registration', () => {
         const redirectedToCreateTeam = await SignupPage.isRedirectedToCreateTeam();
         if (redirectedToCreateTeam) {
             console.log('Redirected to create-first-team page - stopping test');
-            expect(true).toBe(true);
+            
+            // Using Should interface
+            redirectedToCreateTeam.should.be.true;
             return;
         }
         
@@ -36,11 +45,12 @@ describe('Trello User Registration', () => {
         if (recaptchaExists) {
             console.log('First registration attempt triggered reCAPTCHA as expected');
             await browser.pause(500);
+            
+            // Using Expect interface
+            expect(recaptchaExists).to.be.true;
         } else {
             console.log('No reCAPTCHA and no redirection to create-first-team page - skipping test');
             return this.skip();
         }
-        
-        expect(true).toBe(true);
     });
 });
