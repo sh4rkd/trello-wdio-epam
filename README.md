@@ -1,6 +1,6 @@
 # Trello WebdriverIO Testing Framework
 
-This project implements an automated testing framework for the Trello application using WebdriverIO, Mocha, and Chai.
+This project implements an automated testing framework for the Trello application using WebdriverIO, Mocha, and Chai, built with a layered architecture approach.
 
 ## Requirements
 
@@ -16,9 +16,9 @@ git clone https://github.com/sh4rkd/trello-wdio-epam.git
 cd trello-wdio-epam
 ```
 
-2. Switch to the Chai branch:
+2. Switch to the layered-architecture branch:
 ```bash
-git checkout chai
+git checkout layered-architecture
 ```
 
 3. Install dependencies:
@@ -31,30 +31,60 @@ npm install
 npm list chai
 ```
 
-If you need to install or update to the specific Chai version:
-```bash
-npm install chai@4.3.7 --save-dev
-```
-
 ## Project Structure
+
+The framework follows a layered architecture pattern:
 
 ```
 trello-wdio-tests/
-├── package.json             # npm configuration and scripts
-├── wdio.conf.js             # WebdriverIO main configuration
-├── test/
-│   ├── specs/               # Mocha tests
-│   └── pageobjects/         # Page Objects
-└── reports/
-    └── spec-reports/        # Generated reports (in console)
+├── src/                      # Source code
+│   ├── core/                 # Core Layer (generic, reusable components)
+│   │   ├── elements/         # Element wrappers
+│   │   │   ├── button.js     # Button element wrapper
+│   │   │   ├── element.js    # Base element wrapper
+│   │   │   ├── index.js      # Elements exports
+│   │   │   └── input.js      # Input element wrapper
+│   │   ├── utils/            # Utility functions
+│   │   │   └── wait.js       # Wait utilities
+│   │   └── page.js           # Base Page Object
+│   │
+│   └── business/             # Business Layer (application-specific)
+│       └── pages/            # Page Objects organized by feature
+│           ├── login/        # Login-related pages
+│           ├── profile/      # Profile-related pages
+│           └── signup/       # Signup-related pages
+│
+├── test/                     # Test Layer
+│   ├── config/               # Test configurations
+│   │   └── wdio.conf.js      # WebdriverIO configuration
+│   └── specs/                # Test specifications
+│
+├── wdio.conf.js              # Main WebdriverIO config
+├── package.json              # Project dependencies
+└── README.md                 # This file
 ```
+
+## Layered Architecture
+
+1. **Core Layer**: Contains base functionality that isn't project-specific
+   - Base Element class and specialized elements (Button, Input)
+   - Base Page class with common methods
+   - Utility functions for waiting and other operations
+
+2. **Business Layer**: Contains all application-specific functionality
+   - Page Objects organized by feature
+   - Business logic specific to the Trello application
+
+3. **Test Layer**: Contains test specifications and configurations
+   - Test specs that use the business layer
+   - Test configuration files
 
 ## Implemented Features
 
+- ✅ Layered architecture following SOLID principles
 - ✅ WebdriverIO configured with Mocha
 - ✅ Chai assertion library with three interfaces (Assert, Should, Expect)
-- ✅ Execution in multiple browsers (Chrome, Firefox, Safari)
-- ✅ Headless mode for execution in CI/CD environments
+- ✅ Execution in multiple browsers (Chrome, Firefox)
 - ✅ Parallel execution (2 instances)
 - ✅ Automatic retry (2 times) before marking a test as failed
 - ✅ Page Object Pattern for better maintainability
@@ -73,7 +103,7 @@ npm test
 # Chrome only
 npm run test:chrome
 
-# Firefox only - Requires installing geckodriver and enabling the service in wdio.conf.js
+# Firefox only
 npm run test:firefox
 ```
 
@@ -93,7 +123,6 @@ The framework covers the following scenarios:
 1. **User Authentication**
    - Regular login
    - First-time account setup
-   - Two-step verification option
 
 2. **User Registration**
    - Registration with different email formats
@@ -129,17 +158,16 @@ The framework uses Chai assertion library with three different interfaces:
   expect(someValue).to.be.true;
   ```
 
+## Design Principles
+
+The framework follows these design principles:
+
+- **DRY** (Don't Repeat Yourself): Common functionality is extracted to base classes
+- **KISS** (Keep It Simple, Stupid): Each component has a clear, focused purpose
+- **YAGNI** (You Aren't Gonna Need It): Only necessary functionality is implemented
+- **SOLID**: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion
+
 ## Important Notes
 
 - Make sure you have Node.js and npm installed before starting.
-- For macOS, you may need to enable WebDriver for Safari in developer settings.
-- Tests are configured with example credentials. In a real environment, you should configure valid credentials or use a mechanism to generate test accounts.
-- If you want to add support for Firefox, you'll need to install "geckodriver" and "wdio-geckodriver-service", and then uncomment the corresponding lines in wdio.conf.js.
-- **Important**: This project specifically uses Chai 4.3.7 due to compatibility requirements with CommonJS modules. Chai 5.x and above are ES modules and would require different import syntax.
-
-## WebdriverIO Configuration
-
-The framework is configured to run tests in parallel with the following options:
-- 2 parallel instances
-- Automatic retry (2 times) before marking a test as failed
-- Base URL: https://trello.com
+- This project specifically uses Chai 4.3.7 due to compatibility requirements with CommonJS modules. Chai 5.x and above are ES modules and would require different import syntax.
