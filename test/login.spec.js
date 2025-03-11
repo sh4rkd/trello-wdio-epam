@@ -1,4 +1,5 @@
-const LoginPage = require('../pageobjects/login.page');
+// Updated test/specs/login.spec.js
+const LoginPage = require('../src/business/pages/login/login.page');
 require('dotenv').config();
 const chai = require('chai');
 const assert = chai.assert;
@@ -12,20 +13,17 @@ describe('Trello Login', () => {
     it('should login successfully with valid credentials', async () => {
         await LoginPage.open();
         
-        await LoginPage.loginButton.waitForClickable({ timeout: 5000 });
-        await LoginPage.loginButton.click();
+        await LoginPage.loginButton.clickWithWait({ timeout: 5000 });
         
         await LoginPage.emailInput.waitForDisplayed({ timeout: 5000 });
         await LoginPage.emailInput.setValue(TEST_USER.email);
         
-        await LoginPage.continueButton.waitForClickable({ timeout: 5000 });
-        await LoginPage.continueButton.click();
+        await LoginPage.continueButton.clickWithWait({ timeout: 5000 });
         
         await LoginPage.passwordInput.waitForDisplayed({ timeout: 5000 });
         await LoginPage.passwordInput.setValue(TEST_USER.password);
         
-        await LoginPage.loginSubmitButton.waitForClickable({ timeout: 5000 });
-        await LoginPage.loginSubmitButton.click();
+        await LoginPage.loginSubmitButton.clickWithWait({ timeout: 5000 });
         
         await LoginPage.boardDashboard.waitForDisplayed({ timeout: 10000 });
         

@@ -1,5 +1,5 @@
-const LoginPage = require('../pageobjects/login.page');
-const LogoutPage = require('../pageobjects/logout.page');
+const LoginPage = require('../src/business/pages/login/login.page');
+const LogoutPage = require('../src/business/pages/login/logout.page');
 require('dotenv').config();
 const chai = require('chai');
 chai.should();
@@ -31,28 +31,14 @@ describe('Trello Session Management', () => {
     });
 
     it('should securely terminate session', async () => {
-        await LogoutPage.profileIcon.waitForClickable({ timeout: 5000 });
-        await LogoutPage.profileIcon.click();
-        
-        await LogoutPage.logoutOption.waitForClickable({ timeout: 5000 });
-        await LogoutPage.logoutOption.click();
-        
-        await LogoutPage.logoutConfirmButton.waitForClickable({ timeout: 5000 });
-        await LogoutPage.logoutConfirmButton.click();
-        
-        await browser.waitUntil(
-            async () => (await browser.getUrl()).includes('trello.com/home'),
-            {
-                timeout: 10000,
-                timeoutMsg: 'Expected URL to contain trello.com/home after 10s'
-            }
-        );
+        await LogoutPage.logout();
         
         const url = await browser.getUrl();
         url.should.include('trello.com/home');
         
         await browser.url(userBoardsUrl);
         
+        // Use the generic h1 selector like in the page object
         const errorHeader = await $('h1');
         await errorHeader.waitForExist({ timeout: 10000 });
         

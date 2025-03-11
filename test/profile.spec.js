@@ -1,5 +1,5 @@
-const LoginPage = require('../pageobjects/login.page');
-const ProfilePage = require('../pageobjects/profile.page');
+const LoginPage = require('../src/business/pages/login/login.page');
+const ProfilePage = require('../src/business/pages/profile/profile.page');
 require('dotenv').config();
 const chai = require('chai');
 const expect = chai.expect;
@@ -33,16 +33,14 @@ describe('Trello Profile Management', () => {
         
         console.log('Navigating to profile settings...');
         
-        await browser.waitUntil(
-            async () => (await browser.getUrl()).includes(`/u/${currentUsername}`),
-            {
-                timeout: 10000,
-                timeoutMsg: `Expected URL to include /u/${currentUsername} after 10s`
-            }
-        );
+        await ProfilePage.waitForUrlContains(`/u/${currentUsername}`, {
+            timeout: 10000,
+            timeoutMsg: `Expected URL to include /u/${currentUsername} after 10s`
+        });
         
         console.log('URL verified correctly');
-
+        
+        // Wait for the profile form to be visible
         await ProfilePage.profileForm.waitForDisplayed({ timeout: 10000 });
         
         const isFormDisplayed = await ProfilePage.profileForm.isDisplayed();
@@ -74,13 +72,10 @@ describe('Trello Profile Management', () => {
         
         expect(confirmationMessage).to.contain('Saved');
         
-        await browser.waitUntil(
-            async () => (await browser.getUrl()).includes(newUsername),
-            {
-                timeout: 10000,
-                timeoutMsg: `Expected URL to include ${newUsername} after 10s`
-            }
-        );
+        await ProfilePage.waitForUrlContains(newUsername, {
+            timeout: 10000,
+            timeoutMsg: `Expected URL to include ${newUsername} after 10s`
+        });
         
         console.log(`Username successfully updated to: ${newUsername}`);
         

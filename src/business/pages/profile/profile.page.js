@@ -1,26 +1,29 @@
-const Page = require('./page');
+const Page = require('../../../core/page');
+const { Button, Input, Element } = require('../../../core/elements');
 
 class ProfilePage extends Page {
-    get profileIcon() { return $('.js-open-header-member-menu'); }
-    get settingsOption() { return $('[data-testid="account-menu-settings"]'); }
-    get profileVisibilityOption() { return $('.js-member-profile'); }
-    get usernameInput() { return $('input[name="username"]'); }
-    get bioInput() { return $('textarea#bio'); }
-    get saveButton() { return $('button[type="submit"]'); }
-    get savedConfirmation() { return $('span=Saved'); }
-    get usernameError() { return $('#SaveProfileError_Field_username'); }
-    get profileForm() { return $('[data-testid="profile-tab-container"]'); }
-    get userProfileLink() { return $('a[href*="/u/"]'); }
+    constructor() {
+        super();
+        this.profileIcon = new Button('.js-open-header-member-menu', 'Profile Icon');
+        this.settingsOption = new Button('[data-testid="account-menu-settings"]', 'Settings Option');
+        this.profileVisibilityOption = new Button('.js-member-profile', 'Profile Visibility Option');
+        this.usernameInput = new Input('input[name="username"]', 'Username Input');
+        this.bioInput = new Input('textarea#bio', 'Bio Input');
+        this.saveButton = new Button('button[type="submit"]', 'Save Button');
+        this.savedConfirmation = new Element('span=Saved', 'Saved Confirmation');
+        this.usernameError = new Element('#SaveProfileError_Field_username', 'Username Error');
+        this.profileForm = new Element('[data-testid="profile-tab-container"]', 'Profile Form');
+        this.userProfileLink = new Element('a[href*="/u/"]', 'User Profile Link');
+    }
     
     /**
      * Gets the current username from the profile link
      * @returns {Promise<string>} Username extracted from the link
      */
     async getCurrentUsername() {
-        const profileLink = await this.userProfileLink;
-        await profileLink.waitForExist({ timeout: 5000 });
+        await this.userProfileLink.waitForExist({ timeout: 5000 });
         
-        const href = await profileLink.getAttribute('href');
+        const href = await this.userProfileLink.getAttribute('href');
         const match = href.match(/\/u\/([^\/]+)/);
         
         if (match && match[1]) {
@@ -34,14 +37,9 @@ class ProfilePage extends Page {
      * Navigates to the current user's profile settings
      */
     async navigateToProfileSettings() {
-        await this.profileIcon.waitForClickable({ timeout: 5000 });
-        await this.profileIcon.click();
-        
-        await this.settingsOption.waitForClickable({ timeout: 5000 });
-        await this.settingsOption.click();
-        
-        await this.profileVisibilityOption.waitForClickable({ timeout: 5000 });
-        await this.profileVisibilityOption.click();
+        await this.profileIcon.clickWithWait({ timeout: 5000 });
+        await this.settingsOption.clickWithWait({ timeout: 5000 });
+        await this.profileVisibilityOption.clickWithWait({ timeout: 5000 });
     }
     
     /**
@@ -50,11 +48,9 @@ class ProfilePage extends Page {
      */
     async updateUsername(username) {
         await this.usernameInput.waitForDisplayed({ timeout: 5000 });
-        await this.usernameInput.clearValue();
-        await this.usernameInput.setValue(username);
+        await this.usernameInput.clearAndSetValue(username);
         
-        await this.saveButton.waitForClickable({ timeout: 5000 });
-        await this.saveButton.click();
+        await this.saveButton.clickWithWait({ timeout: 5000 });
     }
     
     /**
@@ -63,11 +59,9 @@ class ProfilePage extends Page {
      */
     async updateBio(bioText) {
         await this.bioInput.waitForDisplayed({ timeout: 5000 });
-        await this.bioInput.clearValue();
-        await this.bioInput.setValue(bioText);
+        await this.bioInput.clearAndSetValue(bioText);
         
-        await this.saveButton.waitForClickable({ timeout: 5000 });
-        await this.saveButton.click();
+        await this.saveButton.clickWithWait({ timeout: 5000 });
     }
     
     /**

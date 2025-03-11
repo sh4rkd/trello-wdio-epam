@@ -8,10 +8,10 @@
     "test:chrome": "wdio run wdio.conf.js",
     "test:firefox": "wdio run wdio.conf.js --spec.firefox",
     "test:headless": "wdio run wdio.conf.js",
-    "test:login": "wdio run wdio.conf.js --spec ./test/specs/login.spec.js",
-    "test:signup": "wdio run wdio.conf.js --spec ./test/specs/signup.spec.js",
-    "test:profile": "wdio run wdio.conf.js --spec ./test/specs/profile.spec.js",
-    "test:logout": "wdio run wdio.conf.js --spec ./test/specs/logout.spec.js",
+    "test:login": "wdio run wdio.conf.js --spec ./test/login.spec.js",
+    "test:signup": "wdio run wdio.conf.js --spec ./test/signup.spec.js",
+    "test:profile": "wdio run wdio.conf.js --spec ./test/profile.spec.js",
+    "test:logout": "wdio run wdio.conf.js --spec ./test/logout.spec.js",
     "test:parallel": "wdio run wdio.conf.js --maxInstances=2"
   },
   "keywords": [

@@ -1,16 +1,25 @@
-const Page = require('./page');
+const Page = require('../../../core/page');
+const { Button, Input, Element } = require('../../../core/elements');
+const WaitUtils = require('../../../core/utils/wait');
 
 class SignupPage extends Page {
-    get signupButton() { return $('a[data-uuid*="_signup"]'); }
-    get emailInput() { return $('input#email'); }
-    get signupSubmitButton() { return $('#signup-submit'); }
-    get signupPage() { return $('#signup-submit'); }
-    
-    get verificationBanner() { 
-        return $('[data-testid="confirm-email-banner"], div[class*="emailBanner"], .confirm-email'); 
+    constructor() {
+        super();
+        this.signupButton = new Button('a[data-uuid*="_signup"]', 'Signup Button');
+        this.emailInput = new Input('input#email', 'Email Input');
+        this.signupSubmitButton = new Button('#signup-submit', 'Signup Submit Button');
+        this.signupPage = new Element('#signup-submit', 'Signup Page');
+        
+        this.verificationBanner = new Element(
+            '[data-testid="confirm-email-banner"], div[class*="emailBanner"], .confirm-email', 
+            'Verification Banner'
+        );
+        
+        this.bannerMessage = new Element(
+            () => this.verificationBanner.get().then(el => el.$('li, p, div')),
+            'Banner Message'
+        );
     }
-    
-    get bannerMessage() { return this.verificationBanner.$('li, p, div'); }
     
     /**
      * Registers a new user with the provided email
@@ -18,14 +27,12 @@ class SignupPage extends Page {
      */
     async register(email) {
         try {
-            await this.signupButton.waitForClickable({ timeout: 5000 });
-            await this.signupButton.click();
+            await this.signupButton.clickWithWait({ timeout: 5000 });
             
             await this.emailInput.waitForDisplayed({ timeout: 5000 });
             await this.emailInput.setValue(email);
             
-            await this.signupSubmitButton.waitForClickable({ timeout: 5000 });
-            await this.signupSubmitButton.click();
+            await this.signupSubmitButton.clickWithWait({ timeout: 5000 });
             
             console.log(`Successfully submitted registration for: ${email}`);
         } catch (error) {
@@ -53,7 +60,7 @@ class SignupPage extends Page {
                 return { fullMessage: '' };
             }
 
-            // Get text from banner with more direct approach
+            // Get text from banner
             const fullMessage = await this.verificationBanner.getText();
             
             return { fullMessage };
@@ -68,7 +75,8 @@ class SignupPage extends Page {
      * @returns {Promise<boolean>} - True if reCAPTCHA is displayed
      */
     async isRecaptchaDisplayed() {
-        return await $('iframe[title*="reCAPTCHA"]').isExisting();
+        const recaptchaFrame = new Element('iframe[title*="reCAPTCHA"]', 'reCAPTCHA Frame');
+        return await recaptchaFrame.isExisting();
     }
     
     /**
@@ -78,7 +86,7 @@ class SignupPage extends Page {
      */
     async isRedirectedToCreateTeam(timeout = 10000) {
         try {
-            await browser.waitUntil(
+            await WaitUtils.waitFor(
                 async () => {
                     const url = await browser.getUrl();
                     console.log(`Checking redirection: ${url}`);
@@ -97,11 +105,10 @@ class SignupPage extends Page {
         }
     }
     
-    
     /**
      * Opens the signup page
      */
-    open() {
+    async open() {
         return super.open('/');
     }
 }

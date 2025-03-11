@@ -1,4 +1,4 @@
-const SignupPage = require('../pageobjects/signup.page');
+const SignupPage = require('../src/business/pages/signup/signup.page');
 const chai = require('chai');
 const assert = chai.assert;
 const expect = chai.expect;
@@ -14,8 +14,7 @@ describe('Trello User Registration', () => {
     });
 
     it('should access registration page', async () => {
-        await SignupPage.signupButton.waitForClickable({ timeout: 5000 });
-        await SignupPage.signupButton.click();
+        await SignupPage.signupButton.clickWithWait({ timeout: 5000 });
         
         await SignupPage.signupPage.waitForDisplayed({ timeout: 5000 });
         
@@ -38,9 +37,7 @@ describe('Trello User Registration', () => {
             return;
         }
         
-        const recaptchaExists = await $('iframe[title*="reCAPTCHA"]').isExisting()
-            .then(exists => exists)
-            .catch(() => false);
+        const recaptchaExists = await SignupPage.isRecaptchaDisplayed();
             
         if (recaptchaExists) {
             console.log('First registration attempt triggered reCAPTCHA as expected');

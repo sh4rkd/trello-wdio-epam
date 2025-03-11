@@ -1,6 +1,8 @@
+// module.exports = require('./test/config/wdio.conf.js');
+
 exports.config = {
   runner: "local",
-  specs: ["./test/specs/**/*.js"],
+  specs: ["./test/**/*.js"],
   exclude: [],
   maxInstances: 2,
   
