@@ -1,12 +1,12 @@
-# Trello WebdriverIO Testing Framework
+# Trello API Testing Framework
 
-This project implements an automated testing framework for the Trello application using WebdriverIO, Mocha, and Chai, built with a layered architecture approach.
+This project implements an automated testing framework for the Trello REST API using Axios, Mocha, and Chai, focused on board management operations.
 
 ## Requirements
 
 - Node.js (v14 or higher)
 - npm (v6 or higher)
-- Browsers: Chrome (Firefox and Safari optional)
+- Valid Trello API credentials
 
 ## Installation
 
@@ -16,9 +16,9 @@ git clone https://github.com/sh4rkd/trello-wdio-epam.git
 cd trello-wdio-epam
 ```
 
-2. Switch to the layered-architecture branch:
+2. Switch to the api-testing branch:
 ```bash
-git checkout layered-architecture
+git checkout api-testing
 ```
 
 3. Install dependencies:
@@ -26,68 +26,65 @@ git checkout layered-architecture
 npm install
 ```
 
-4. Make sure you have the correct version of Chai (4.3.7):
+4. Set up your environment variables:
 ```bash
-npm list chai
+cp .env.example .env
 ```
+
+5. Edit the `.env` file with your Trello API credentials:
+```
+TRELLO_API_KEY=your_api_key_here
+TRELLO_API_TOKEN=your_api_token_here
+```
+
+You can get your API credentials from [Trello's Developer API Keys page](https://trello.com/app-key).
 
 ## Project Structure
 
-The framework follows a layered architecture pattern:
+The framework follows a clean, organized structure:
 
 ```
-trello-wdio-tests/
-├── src/                      # Source code
-│   ├── core/                 # Core Layer (generic, reusable components)
-│   │   ├── elements/         # Element wrappers
-│   │   │   ├── button.js     # Button element wrapper
-│   │   │   ├── element.js    # Base element wrapper
-│   │   │   ├── index.js      # Elements exports
-│   │   │   └── input.js      # Input element wrapper
-│   │   ├── utils/            # Utility functions
-│   │   │   └── wait.js       # Wait utilities
-│   │   └── page.js           # Base Page Object
-│   │
-│   └── business/             # Business Layer (application-specific)
-│       └── pages/            # Page Objects organized by feature
-│           ├── login/        # Login-related pages
-│           ├── profile/      # Profile-related pages
-│           └── signup/       # Signup-related pages
+trello-api-tests/
+├── test/                     # Test-related code
+│   ├── api/                  # API test specifications
+│   │   └── board.test.js     # Board API tests
+│   ├── config/               # Configuration files
+│   │   └── api-config.js     # API configuration
+│   ├── services/             # API service wrappers
+│   │   └── trello-service.js # Trello API service
+│   └── utils/                # Utilities
+│       └── response-validator.js # Response validation helper
 │
-├── test/                     # Test Layer
-│   ├── config/               # Test configurations
-│   │   └── wdio.conf.js      # WebdriverIO configuration
-│   └── specs/                # Test specifications
-│
-├── wdio.conf.js              # Main WebdriverIO config
+├── .env                      # Environment variables (not in repo)
+├── .env.example              # Example environment variables
 ├── package.json              # Project dependencies
-└── README.md                 # This file
+└── README.md                 # Project documentation
 ```
-
-## Layered Architecture
-
-1. **Core Layer**: Contains base functionality that isn't project-specific
-   - Base Element class and specialized elements (Button, Input)
-   - Base Page class with common methods
-   - Utility functions for waiting and other operations
-
-2. **Business Layer**: Contains all application-specific functionality
-   - Page Objects organized by feature
-   - Business logic specific to the Trello application
-
-3. **Test Layer**: Contains test specifications and configurations
-   - Test specs that use the business layer
-   - Test configuration files
 
 ## Implemented Features
 
-- ✅ Layered architecture following SOLID principles
-- ✅ WebdriverIO configured with Mocha
-- ✅ Chai assertion library with three interfaces (Assert, Should, Expect)
-- ✅ Execution in multiple browsers (Chrome, Firefox)
-- ✅ Parallel execution (2 instances)
-- ✅ Automatic retry (2 times) before marking a test as failed
-- ✅ Page Object Pattern for better maintainability
+- ✅ Complete Trello board API testing
+- ✅ Environment-based configuration
+- ✅ Axios for HTTP requests
+- ✅ Mocha test framework with Chai assertions
+- ✅ Response validation utilities
+- ✅ Error handling and logging
+
+## Test Scenarios
+
+The framework covers the following API operations:
+
+1. **Board Management**
+   - Create a new board
+   - Get board details
+   - Update board properties
+   - Delete a board
+
+Each test includes assertions for:
+- HTTP status codes
+- Response headers
+- Response body validation
+- Error scenarios
 
 ## Running Tests
 
@@ -97,77 +94,56 @@ trello-wdio-tests/
 npm test
 ```
 
-### Run tests in specific browsers
+### Run only board tests
 
 ```bash
-# Chrome only
-npm run test:chrome
-
-# Firefox only
-npm run test:firefox
+npm run test:board
 ```
 
-### Run specific test files
+### Run tests with detailed reporting
 
 ```bash
-npm run test:login      # Login tests
-npm run test:logout     # Logout tests
-npm run test:profile    # Profile management tests
-npm run test:signup     # User registration tests
+npm run test:ci
 ```
 
-## Test Scenarios
+## API Service Layer
 
-The framework covers the following scenarios:
+The framework implements a service layer that abstracts the Trello API calls:
 
-1. **User Authentication**
-   - Regular login
-   - First-time account setup
+- **TrelloService**: Handles all communication with the Trello API
+  - `createBoard(name, options)`: Creates a new board
+  - `getBoard(boardId, options)`: Retrieves board details
+  - `updateBoard(boardId, updateData)`: Updates board properties
+  - `deleteBoard(boardId)`: Deletes a board
 
-2. **User Registration**
-   - Registration with different email formats
-   - Verification banner confirmation
+## Response Validation
 
-3. **Profile Management**
-   - Username updates
-   - Bio updates
-   - Duplicate username error handling
+The `ResponseValidator` utility provides methods to validate API responses:
 
-4. **Session Management**
-   - Secure logout
+- `validateBasicResponse(response, expectedStatus)`: Validates status and headers
+- `validateResponseProperties(responseBody, expectedProps)`: Validates response body properties
 
-## Chai Assertion Library
+## Error Handling
 
-The framework uses Chai assertion library with three different interfaces:
+The framework implements comprehensive error handling:
+- Detailed error messages
+- API error response logging
+- Test skipping when credentials are missing
 
-- **Assert** (login.spec.js): Traditional TDD assertion style
-  ```javascript
-  assert.isTrue(condition, 'message');
-  assert.include(string, substring, 'message');
-  ```
+## Best Practices
 
-- **Should** (logout.spec.js): BDD chain-capable assertion style
-  ```javascript
-  someValue.should.equal(expectedValue);
-  array.should.include(value);
-  ```
+This framework follows several best practices:
 
-- **Expect** (profile.spec.js): BDD chain-capable assertion style
-  ```javascript
-  expect(foo).to.equal('bar');
-  expect(someValue).to.be.true;
-  ```
-
-## Design Principles
-
-The framework follows these design principles:
-
-- **DRY** (Don't Repeat Yourself): Common functionality is extracted to base classes
-- **KISS** (Keep It Simple, Stupid): Each component has a clear, focused purpose
-- **YAGNI** (You Aren't Gonna Need It): Only necessary functionality is implemented
-- **SOLID**: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion
+- **Clean Code**: Minimal, focused components with clear responsibilities
+- **DRY (Don't Repeat Yourself)**: Common functionality extracted to utility methods
+- **Configuration Management**: Environment variables for credentials
+- **Separation of Concerns**: Tests, services, and utilities are kept separate
+- **Proper Error Handling**: All API requests properly handle and report errors
+- **Comprehensive Testing**: Each API endpoint is thoroughly tested
 
 ## Important Notes
 
-- Make sure you have Node.js and npm installed before starting.
-- This project specifically uses Chai 4.3.7 due to compatibility requirements with CommonJS modules. Chai 5.x and above are ES modules and would require different import syntax.
+- Make sure your Trello API credentials have the necessary permissions
+- The framework automatically creates and removes test data
+- Tests are designed to be idempotent and can be run multiple times
+- API rate limits may apply when running tests repeatedly
