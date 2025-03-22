@@ -47,7 +47,42 @@ describe('Trello User Registration', () => {
             expect(recaptchaExists).to.be.true;
         } else {
             console.log('No reCAPTCHA and no redirection to create-first-team page - skipping test');
-            return this.skip();
+            this.skip();
         }
+    });
+    
+    it('second registration attempt (check successful registration)', async () => {
+        const email = generateRandomEmail();
+        await SignupPage.register(email);
+        await browser.pause(1000);
+        
+        // First check if redirected to create-first-team page
+        const redirectedToCreateTeam = await SignupPage.isRedirectedToCreateTeam();
+        if (redirectedToCreateTeam) {
+            console.log('Redirected to create-first-team page - test completed successfully');
+            
+            // Using Should interface
+            redirectedToCreateTeam.should.be.true;
+            return;
+        }
+        
+        // Check if redirected to welcome page (successful registration)
+        const isWelcomePage = await SignupPage.isRedirectedToWelcomePage();
+        if (isWelcomePage) {
+            console.log('Redirected to welcome-to-trello page - registration successful');
+            
+            // Using Expect interface
+            expect(isWelcomePage).to.be.true;
+            return;
+        }
+        
+        // If not redirected to welcome page, check if verification banner appears
+        const { fullMessage } = await SignupPage.verifyBannerContent();
+        
+        // Using Expect interface
+        expect(fullMessage).to.not.be.empty;
+        expect(fullMessage.toLowerCase()).to.include('email');
+        
+        console.log(`Email verification banner displayed with message: ${fullMessage}`);
     });
 });

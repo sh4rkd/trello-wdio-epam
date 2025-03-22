@@ -106,6 +106,32 @@ class SignupPage extends Page {
     }
     
     /**
+     * Checks if user is redirected to welcome-to-trello page within specified timeout
+     * @param {number} timeout - Maximum time to wait in milliseconds
+     * @returns {Promise<boolean>} - True if redirected to welcome-to-trello page
+     */
+    async isRedirectedToWelcomePage(timeout = 10000) {
+        try {
+            await WaitUtils.waitFor(
+                async () => {
+                    const url = await browser.getUrl();
+                    console.log(`Checking welcome page redirection: ${url}`);
+                    return url.includes('/welcome-to-trello');
+                },
+                {
+                    timeout: timeout,
+                    timeoutMsg: `Not redirected to welcome-to-trello after ${timeout}ms`,
+                    interval: 500
+                }
+            );
+            return true;
+        } catch (error) {
+            console.log('Redirection to welcome-to-trello failed:', error.message);
+            return false;
+        }
+    }
+    
+    /**
      * Opens the signup page
      */
     async open() {
