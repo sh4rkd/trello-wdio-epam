@@ -2,16 +2,23 @@
 
 exports.config = {
   runner: 'local',
+  autoCompileOpts: {
+    autoCompile: true,
+    tsNodeOpts: {
+      project: './tsconfig.json',
+      transpileOnly: true,
+    },
+  },
   specs: ['./test/**/*.js'],
   exclude: [],
-  maxInstances: 2,
+  maxInstances: 1,
 
   capabilities: [
     {
       browserName: 'chrome',
-      // 'goog:chromeOptions': {
-      //   args: ["--headless", "--disable-gpu", "--window-size=1920,1080"]
-      // },
+      'goog:chromeOptions': {
+        args: ['--start-maximized'],
+      },
       maxInstances: 2,
       acceptInsecureCerts: true,
     },
@@ -30,7 +37,7 @@ exports.config = {
     ],
   },
 
-  logLevel: 'error',
+  logLevel: 'info',
   bail: 0,
   baseUrl: 'https://trello.com',
   waitforTimeout: 10000,
@@ -38,10 +45,22 @@ exports.config = {
   connectionRetryCount: 3,
 
   services: [
-    'chromedriver',
-    'geckodriver',
-    // If on macOS, uncomment the next line
-    // 'safaridriver'
+    [
+      'chromedriver',
+      {
+        logFileName: 'wdio-chromedriver.log',
+        outputDir: 'driver-logs',
+        args: ['--verbose'],
+      },
+    ],
+    [
+      'geckodriver',
+      {
+        logFileName: 'wdio-geckodriver.log',
+        outputDir: 'driver-logs',
+        args: ['--verbose'],
+      },
+    ],
   ],
 
   framework: 'mocha',
@@ -68,7 +87,7 @@ exports.config = {
       'allure',
       {
         outputDir: 'allure-results',
-        disableWebdriverStepsReporting: false,
+        disableWebdriverStepsReporting: true,
         disableWebdriverScreenshotsReporting: false,
         addConsoleLogs: true,
       },
@@ -80,19 +99,12 @@ exports.config = {
     timeout: 60000,
   },
 
-  before: function (capabilities, specs) {
-    if (
-      (!capabilities['goog:chromeOptions'] ||
-        !capabilities['goog:chromeOptions'].args ||
-        !capabilities['goog:chromeOptions'].args.includes('--headless')) &&
-      (!capabilities['moz:firefoxOptions'] ||
-        !capabilities['moz:firefoxOptions'].args ||
-        !capabilities['moz:firefoxOptions'].args.includes('-headless'))
-    ) {
-      browser.maximizeWindow();
-    }
+  beforeSession: function () {
+    require('@babel/register');
+  },
 
-    browser.setWindowSize(1920, 1080);
+  before: async function (capabilities, specs) {
+    await browser.setWindowSize(1920, 1080);
 
     browser.execute(() => {
       console.defaultLog = console.log.bind(console);
@@ -112,8 +124,10 @@ exports.config = {
     global.expect = chai.expect;
   },
 
-  beforeSession: function (config, capabilities, specs) {
-    process.env.WDIO_SUPPRESS_WELCOME = true;
+  afterTest: async function (test, context, { error, result, duration, passed, retries }) {
+    if (error) {
+      await browser.takeScreenshot();
+    }
   },
 
   onPrepare: function (config, capabilities) {

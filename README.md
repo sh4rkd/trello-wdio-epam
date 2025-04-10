@@ -11,17 +11,20 @@ This project contains automated tests for the Trello application using Webdriver
 ## Setup
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd trello-wdio-tests
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Create a `.env` file in the root directory with the following variables:
+
 ```
 TRELLO_EMAIL=your_email@example.com
 TRELLO_PASSWORD=your_password
@@ -30,6 +33,7 @@ TRELLO_PASSWORD=your_password
 ## Available Scripts
 
 ### Test Scripts
+
 - `npm run test` - Run all tests
 - `npm run test:chrome` - Run tests in Chrome browser
 - `npm run test:firefox` - Run tests in Firefox browser
@@ -41,12 +45,14 @@ TRELLO_PASSWORD=your_password
 - `npm run test:parallel` - Run tests in parallel
 
 ### Linting and Formatting
+
 - `npm run lint` - Run ESLint to check code quality
 - `npm run lint:fix` - Run ESLint to automatically fix issues
 - `npm run format` - Format code using Prettier
 - `npm run format:check` - Check code formatting without making changes
 
 ### Report Generation
+
 - `npm run report:generate` - Generate and open Allure report
 - `npm run report:clear` - Clear Allure results and report
 
@@ -76,6 +82,7 @@ This project uses ESLint and Prettier for code quality and formatting:
 ## CI/CD Pipeline
 
 The project uses GitLab CI/CD with the following stages:
+
 1. Lint - Runs ESLint and Prettier checks
 2. Test - Runs UI and API tests
 
