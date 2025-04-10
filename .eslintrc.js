@@ -5,19 +5,16 @@ module.exports = {
     es2021: true,
     node: true,
     mocha: true,
-    jquery: true
+    jquery: true,
   },
   globals: {
     browser: 'readonly',
-    $: 'readonly'
+    $: 'readonly',
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:prettier/recommended'
-  ],
+  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
   parserOptions: {
     ecmaVersion: 'latest',
-    sourceType: 'module'
+    sourceType: 'module',
   },
   rules: {
     'prettier/prettier': 'warn',
@@ -25,8 +22,17 @@ module.exports = {
     'no-unused-vars': 'warn',
     'prefer-const': 'warn',
     'no-var': 'warn',
-    'eqeqeq': 'warn',
-    'no-useless-escape': 'off'
+    eqeqeq: 'warn',
+    'no-useless-escape': 'off',
   },
-  ignorePatterns: ['node_modules/', 'allure-results/', 'allure-report/', 'test-results/', '*.html', '*.json', '.git/', '.github/']
-}; 
+  ignorePatterns: [
+    'node_modules/',
+    'allure-results/',
+    'allure-report/',
+    'test-results/',
+    '*.html',
+    '*.json',
+    '.git/',
+    '.github/',
+  ],
+};
