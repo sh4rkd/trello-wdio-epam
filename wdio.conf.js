@@ -59,9 +59,9 @@ exports.config = {
         args: ['--verbose'],
         chromedriverCustomPath: {
           chrome: {
-            '135': 'latest'
-          }
-        }
+            '135': 'latest',
+          },
+        },
       },
     ],
     [
