@@ -5,8 +5,11 @@ const WaitUtils = require('../../../core/utils/wait');
 class SignupPage extends Page {
   constructor() {
     super();
-    this.signupButton = new Button('a[data-uuid*="_signup"]', 'Signup Button');
+    this.signupButton = new Button('a[href*="/signup"]', 'Signup Button');
     this.emailInput = new Input('input#email', 'Email Input');
+    this.continueButton = new Button('#signup-submit', 'Continue Button');
+    this.nameInput = new Input('input#displayName', 'Name Input');
+    this.passwordInput = new Input('input#password', 'Password Input');
     this.signupSubmitButton = new Button('#signup-submit', 'Signup Submit Button');
     this.signupPage = new Element('#signup-submit', 'Signup Page');
 
@@ -22,23 +25,27 @@ class SignupPage extends Page {
   }
 
   /**
-   * Registers a new user with the provided email
-   * @param {string} email - Email to register with
+   * Sign up with provided credentials
+   * @param {string} email - User email
+   * @param {string} name - User name
+   * @param {string} password - User password
    */
-  async register(email) {
-    try {
-      await this.signupButton.clickWithWait({ timeout: 5000 });
+  async signup(email, name, password) {
+    await this.open();
+    await this.signupButton.clickWithWait({ timeout: 5000 });
 
-      await this.emailInput.waitForDisplayed({ timeout: 5000 });
-      await this.emailInput.setValue(email);
+    await this.emailInput.waitForDisplayed({ timeout: 5000 });
+    await this.emailInput.setValue(email);
 
-      await this.signupSubmitButton.clickWithWait({ timeout: 5000 });
+    await this.continueButton.clickWithWait({ timeout: 5000 });
 
-      console.log(`Successfully submitted registration for: ${email}`);
-    } catch (error) {
-      console.error(`Error in register method: ${error.message}`);
-      throw error;
-    }
+    await this.nameInput.waitForDisplayed({ timeout: 5000 });
+    await this.nameInput.setValue(name);
+
+    await this.passwordInput.waitForDisplayed({ timeout: 5000 });
+    await this.passwordInput.setValue(password);
+
+    await this.signupSubmitButton.clickWithWait({ timeout: 5000 });
   }
 
   /**
@@ -135,7 +142,7 @@ class SignupPage extends Page {
    * Opens the signup page
    */
   async open() {
-    return super.open('/');
+    await super.open('/');
   }
 }
 

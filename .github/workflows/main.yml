@@ -35,7 +35,7 @@ jobs:
         git config --global user.name 'github-actions'
         git config --global user.email 'github-actions@github.com'
         git add .
-        git commit -m "style: format code with prettier" || echo "No changes to commit"
+        git diff --staged --quiet || git commit -m "style: format code with prettier"
         
     - name: Format Check
       run: npm run format:check

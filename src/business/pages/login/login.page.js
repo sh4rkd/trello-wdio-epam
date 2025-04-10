@@ -11,7 +11,7 @@ class LoginPage extends Page {
     this.loginSubmitButton = new Button('#login-submit', 'Login Submit Button');
     this.boardDashboard = new Element(
       '.board-tile, .boards-page-board-section-list-item',
-      'Board Dashboard'
+      'Board Dashboard',
     );
   }
 
