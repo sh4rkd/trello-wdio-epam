@@ -24,7 +24,7 @@ exports.config = {
           '--disable-dev-shm-usage',
           '--disable-gpu',
           '--remote-debugging-port=9222',
-          '--disable-extensions'
+          '--disable-extensions',
         ],
       },
     },

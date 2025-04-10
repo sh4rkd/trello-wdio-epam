@@ -4,6 +4,7 @@
   "description": "WebdriverIO tests for Trello application",
   "main": "index.js",
   "scripts": {
+    "pretest": "npm install",
     "test": "wdio run wdio.conf.js",
     "test:chrome": "wdio run wdio.conf.js",
     "test:firefox": "wdio run wdio.conf.js --spec.firefox",
