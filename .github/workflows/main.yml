@@ -12,7 +12,7 @@ jobs:
     
     strategy:
       matrix:
-        node-version: [22.14.0]
+        node-version: [20.15.0]
         
     steps:
     - uses: actions/checkout@v4
@@ -21,13 +21,6 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: package-lock.json
-        
-    - name: Clear npm cache
-      run: |
-        npm cache clean --force
-        rm -rf node_modules package-lock.json
         
     - name: Setup Chrome
       uses: browser-actions/setup-chrome@v1
@@ -38,10 +31,7 @@ jobs:
       run: |
         node --version
         npm --version
-        npm install -g npm@latest
         npm install
-      env:
-        NODE_VERSION: ${{ matrix.node-version }}
       
     - name: Run tests
       run: npm test
