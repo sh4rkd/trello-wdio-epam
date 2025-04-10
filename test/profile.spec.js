@@ -103,8 +103,8 @@ describe('Trello Profile Management', () => {
     const errorMessage = await ProfilePage.getErrorMessage();
 
     const expectedMessages = ['Username is taken', 'Este nombre de usuario ya existe'];
-    expect(errorMessage).to.satisfy((msg) => {
-      return expectedMessages.some((expected) => msg.includes(expected));
+    expect(errorMessage).to.satisfy(msg => {
+      return expectedMessages.some(expected => msg.includes(expected));
     });
 
     console.log(`Existing username test completed successfully`);

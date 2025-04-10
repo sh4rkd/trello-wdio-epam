@@ -36,7 +36,7 @@ class LogoutPage extends Page {
     const expectedMessages = ['Page not found.', 'Página no encontrada.'];
 
     // Verify the text is either in English or Spanish
-    const isErrorMessage = expectedMessages.some((msg) => errorText === msg);
+    const isErrorMessage = expectedMessages.some(msg => errorText === msg);
 
     if (!isErrorMessage) {
       throw new Error(

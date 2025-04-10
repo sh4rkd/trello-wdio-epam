@@ -16,7 +16,7 @@ class SignupPage extends Page {
     );
 
     this.bannerMessage = new Element(
-      () => this.verificationBanner.get().then((el) => el.$('li, p, div')),
+      () => this.verificationBanner.get().then(el => el.$('li, p, div')),
       'Banner Message'
     );
   }
