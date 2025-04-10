@@ -1,4 +1,4 @@
-image: node:18-lts
+image: node:18.20.0
 
 stages:
   - lint
