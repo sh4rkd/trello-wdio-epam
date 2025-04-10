@@ -28,8 +28,14 @@ jobs:
         npm --version
         npm install
         
-    - name: Format code
-      run: npm run format
+    - name: Check Format Diff
+      run: npx prettier --write wdio.conf.js
+        
+    - name: Show Git Diff
+      run: git diff
+        
+    - name: Format Check
+      run: npm run format:check
         
     - name: Setup Chrome
       uses: browser-actions/setup-chrome@v1
