@@ -4,7 +4,12 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
-    mocha: true
+    mocha: true,
+    jquery: true
+  },
+  globals: {
+    browser: 'readonly',
+    $: 'readonly'
   },
   extends: [
     'eslint:recommended',
@@ -16,11 +21,12 @@ module.exports = {
   },
   rules: {
     'prettier/prettier': 'warn',
-    'no-console': 'warn',
+    'no-console': 'off',
     'no-unused-vars': 'warn',
     'prefer-const': 'warn',
     'no-var': 'warn',
-    'eqeqeq': 'warn'
+    'eqeqeq': 'warn',
+    'no-useless-escape': 'off'
   },
   ignorePatterns: ['node_modules/', 'allure-results/', 'allure-report/', 'test-results/', '*.html', '*.json', '.git/', '.github/']
 }; 
