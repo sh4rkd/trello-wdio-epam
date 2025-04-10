@@ -17,7 +17,15 @@ exports.config = {
     {
       browserName: 'chrome',
       'goog:chromeOptions': {
-        args: ['--start-maximized'],
+        args: [
+          '--start-maximized',
+          '--headless=new',
+          '--no-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu',
+          '--remote-debugging-port=9222',
+          '--disable-extensions'
+        ],
       },
     },
   ],
