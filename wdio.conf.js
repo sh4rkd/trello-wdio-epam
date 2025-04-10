@@ -19,8 +19,6 @@ exports.config = {
       'goog:chromeOptions': {
         args: ['--start-maximized'],
       },
-      maxInstances: 2,
-      acceptInsecureCerts: true,
     },
   ],
 
@@ -89,7 +87,6 @@ exports.config = {
         outputDir: 'allure-results',
         disableWebdriverStepsReporting: true,
         disableWebdriverScreenshotsReporting: false,
-        addConsoleLogs: true,
       },
     ],
   ],
