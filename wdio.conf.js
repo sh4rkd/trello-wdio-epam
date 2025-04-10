@@ -57,6 +57,11 @@ exports.config = {
         logFileName: 'wdio-chromedriver.log',
         outputDir: 'driver-logs',
         args: ['--verbose'],
+        chromedriverCustomPath: {
+          chrome: {
+            '135': 'latest'
+          }
+        }
       },
     ],
     [
