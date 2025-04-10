@@ -1,137 +1,92 @@
-# Trello WebdriverIO Test Automation Framework
+# Trello WebdriverIO Tests
 
-This project contains automated tests for the Trello application using WebdriverIO, Mocha, and Chai.
+This project contains automated tests for the Trello application using WebdriverIO framework.
 
 ## Prerequisites
 
 - Node.js (v14 or higher)
 - npm (v6 or higher)
-- Chrome browser
-- Firefox browser (optional)
+- Chrome and/or Firefox browser
 
-## Installation
+## Setup
 
 1. Clone the repository:
-
 ```bash
-git clone https://github.com/sh4rkd/feature/report-integration
+git clone <repository-url>
 cd trello-wdio-tests
 ```
 
 2. Install dependencies:
-
 ```bash
 npm install
 ```
 
-## Configuration
-
-The framework is configured in `wdio.conf.js`. Key configurations include:
-
-- Browser capabilities (Chrome and Firefox)
-- Test framework (Mocha)
-- Reporters (Spec and Allure)
-- Timeouts and retry settings
-- Base URL and other test settings
-
-## Running Tests
-
-### Run all tests
-
-```bash
-npm run test
+3. Create a `.env` file in the root directory with the following variables:
+```
+TRELLO_EMAIL=your_email@example.com
+TRELLO_PASSWORD=your_password
 ```
 
-### Run specific test suites
+## Available Scripts
 
-```bash
-# Login tests
-npm run test:login
+### Test Scripts
+- `npm run test` - Run all tests
+- `npm run test:chrome` - Run tests in Chrome browser
+- `npm run test:firefox` - Run tests in Firefox browser
+- `npm run test:headless` - Run tests in headless mode
+- `npm run test:login` - Run login tests
+- `npm run test:signup` - Run signup tests
+- `npm run test:profile` - Run profile tests
+- `npm run test:logout` - Run logout tests
+- `npm run test:parallel` - Run tests in parallel
 
-# Signup tests
-npm run test:signup
+### Linting and Formatting
+- `npm run lint` - Run ESLint to check code quality
+- `npm run lint:fix` - Run ESLint to automatically fix issues
+- `npm run format` - Format code using Prettier
+- `npm run format:check` - Check code formatting without making changes
 
-# Profile tests
-npm run test:profile
-
-# Logout tests
-npm run test:logout
-```
-
-### Run tests in specific browser
-
-```bash
-# Chrome
-npm run test:chrome
-
-# Firefox
-npm run test:firefox
-```
-
-### Run tests in parallel
-
-```bash
-npm run test:parallel
-```
-
-## Test Reports
-
-The framework generates two types of reports:
-
-### Spec Reporter
-
-- Shows test results in the console in real-time
-- Displays pass/fail status with symbols (✓, ✖, -)
-- Includes console logs for debugging
-
-### Allure Reporter
-
-- Generates detailed HTML reports
-- Includes test steps, screenshots, and logs
-- Provides test execution statistics and trends
-
-To generate and view Allure reports:
-
-```bash
-# Generate and open report
-npm run report:generate
-
-# Clear previous reports
-npm run report:clear
-```
+### Report Generation
+- `npm run report:generate` - Generate and open Allure report
+- `npm run report:clear` - Clear Allure results and report
 
 ## Project Structure
 
 ```
-trello-wdio-tests/
-├── test/                    # Test files
-│   ├── login.spec.js       # Login test suite
-│   ├── signup.spec.js      # Signup test suite
-│   ├── profile.spec.js     # Profile test suite
-│   └── logout.spec.js      # Logout test suite
-├── src/                    # Source files
-│   └── core/              # Core framework files
-├── wdio.conf.js           # WebdriverIO configuration
-├── package.json           # Project dependencies
-└── README.md             # Project documentation
+├── test/
+│   ├── e2e/           # End-to-end tests
+│   ├── specs/         # Test specifications
+│   └── utils/         # Test utilities
+├── src/
+│   ├── pages/         # Page objects
+│   └── utils/         # Utility functions
+├── allure-results/    # Test execution results
+├── allure-report/     # Generated reports
+└── wdio.conf.js       # WebdriverIO configuration
 ```
 
-## Test Data
+## Code Quality
 
-Test data is managed through environment variables. Create a `.env` file in the root directory with the following variables:
+This project uses ESLint and Prettier for code quality and formatting:
 
-```
-TEST_USER_EMAIL=your-test-email@example.com
-TEST_USER_PASSWORD=your-test-password
-```
+- ESLint configuration is in `.eslintrc.json`
+- Prettier configuration is in `.prettierrc`
+- Both linters are integrated into the CI pipeline
+
+## CI/CD Pipeline
+
+The project uses GitLab CI/CD with the following stages:
+1. Lint - Runs ESLint and Prettier checks
+2. Test - Runs UI and API tests
 
 ## Contributing
 
-1. Create a feature branch
+1. Create a new branch for your feature
 2. Make your changes
-3. Run tests to ensure everything works
-4. Submit a pull request
+3. Run linters: `npm run lint && npm run format:check`
+4. Run tests: `npm run test`
+5. Create a Merge Request
 
 ## License
 
-This project is licensed under the ISC License.
+ISC
