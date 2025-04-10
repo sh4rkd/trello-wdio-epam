@@ -28,11 +28,14 @@ jobs:
         npm --version
         npm install
         
-    - name: Check Format Diff
-      run: npx prettier --write wdio.conf.js
-        
-    - name: Show Git Diff
-      run: git diff
+    - name: Format files
+      run: |
+        npx prettier --write "src/**/*.js"
+        npx prettier --write "wdio.conf.js"
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions@github.com'
+        git add .
+        git commit -m "style: format code with prettier" || echo "No changes to commit"
         
     - name: Format Check
       run: npm run format:check
