@@ -5,11 +5,11 @@ const WaitUtils = require('../../../core/utils/wait');
 class SignupPage extends Page {
   constructor() {
     super();
-    this.signupButton = new Button('a[href*="/signup"]', 'Signup Button');
-    this.emailInput = new Input('input#email', 'Email Input');
+    this.signupButton = new Button('button[type="submit"]', 'Signup Button');
+    this.emailInput = new Input('input[name="email"]', 'Email Input');
     this.continueButton = new Button('#signup-submit', 'Continue Button');
-    this.nameInput = new Input('input#displayName', 'Name Input');
-    this.passwordInput = new Input('input#password', 'Password Input');
+    this.nameInput = new Input('input[name="name"]', 'Name Input');
+    this.passwordInput = new Input('input[name="password"]', 'Password Input');
     this.signupSubmitButton = new Button('#signup-submit', 'Signup Submit Button');
     this.signupPage = new Element('#signup-submit', 'Signup Page');
 
@@ -25,27 +25,32 @@ class SignupPage extends Page {
   }
 
   /**
-   * Sign up with provided credentials
-   * @param {string} email - User email
-   * @param {string} name - User name
-   * @param {string} password - User password
+   * Fill signup form with provided data
+   * @param {Object} data - signup form data
+   * @param {string} data.email - email address
+   * @param {string} data.name - user name
+   * @param {string} data.password - password
    */
-  async signup(email, name, password) {
-    await this.open();
-    await this.signupButton.clickWithWait({ timeout: 5000 });
-
-    await this.emailInput.waitForDisplayed({ timeout: 5000 });
+  async fillSignupForm({ email, name, password }) {
     await this.emailInput.setValue(email);
-
-    await this.continueButton.clickWithWait({ timeout: 5000 });
-
-    await this.nameInput.waitForDisplayed({ timeout: 5000 });
     await this.nameInput.setValue(name);
-
-    await this.passwordInput.waitForDisplayed({ timeout: 5000 });
     await this.passwordInput.setValue(password);
+  }
 
-    await this.signupSubmitButton.clickWithWait({ timeout: 5000 });
+  /**
+   * Submit signup form
+   */
+  async submitSignupForm() {
+    await this.signupButton.clickWithWait();
+  }
+
+  /**
+   * Complete signup process with provided data
+   * @param {Object} data - signup form data
+   */
+  async signup(data) {
+    await this.fillSignupForm(data);
+    await this.submitSignupForm();
   }
 
   /**
