@@ -12,12 +12,14 @@ This project contains automated tests for the Trello application using Webdriver
 ## Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/sh4rkd/feature/report-integration
 cd trello-wdio-tests
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
@@ -35,11 +37,13 @@ The framework is configured in `wdio.conf.js`. Key configurations include:
 ## Running Tests
 
 ### Run all tests
+
 ```bash
 npm run test
 ```
 
 ### Run specific test suites
+
 ```bash
 # Login tests
 npm run test:login
@@ -55,6 +59,7 @@ npm run test:logout
 ```
 
 ### Run tests in specific browser
+
 ```bash
 # Chrome
 npm run test:chrome
@@ -64,6 +69,7 @@ npm run test:firefox
 ```
 
 ### Run tests in parallel
+
 ```bash
 npm run test:parallel
 ```
@@ -73,16 +79,19 @@ npm run test:parallel
 The framework generates two types of reports:
 
 ### Spec Reporter
+
 - Shows test results in the console in real-time
 - Displays pass/fail status with symbols (✓, ✖, -)
 - Includes console logs for debugging
 
 ### Allure Reporter
+
 - Generates detailed HTML reports
 - Includes test steps, screenshots, and logs
 - Provides test execution statistics and trends
 
 To generate and view Allure reports:
+
 ```bash
 # Generate and open report
 npm run report:generate
