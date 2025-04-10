@@ -109,11 +109,11 @@ exports.config = {
     timeout: 60000,
   },
 
-  beforeSession: function () {
+  beforeSession() {
     require('@babel/register');
   },
 
-  before: async function (capabilities, specs) {
+  async before(capabilities, specs) {
     await browser.setWindowSize(1920, 1080);
 
     browser.execute(() => {
@@ -134,13 +134,13 @@ exports.config = {
     global.expect = chai.expect;
   },
 
-  afterTest: async function (test, context, { error, result, duration, passed, retries }) {
+  async afterTest(test, context, { error }) {
     if (error) {
       await browser.takeScreenshot();
     }
   },
 
-  onPrepare: function (config, capabilities) {
+  onPrepare(config, capabilities) {
     if (process.argv.includes('--spec.firefox')) {
       config.capabilities = config.firefox.capabilities;
     }
