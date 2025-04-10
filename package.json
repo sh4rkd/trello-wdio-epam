@@ -12,7 +12,9 @@
     "test:signup": "wdio run wdio.conf.js --spec ./test/signup.spec.js",
     "test:profile": "wdio run wdio.conf.js --spec ./test/profile.spec.js",
     "test:logout": "wdio run wdio.conf.js --spec ./test/logout.spec.js",
-    "test:parallel": "wdio run wdio.conf.js --maxInstances=2"
+    "test:parallel": "wdio run wdio.conf.js --maxInstances=2",
+    "report:generate": "npx allure-commandline generate allure-results --clean && npx allure-commandline open allure-report",
+    "report:clear": "rimraf allure-results allure-report"
   },
   "keywords": [
     "webdriverio",
@@ -24,14 +26,17 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@wdio/cli": "^7.16.12",
-    "@wdio/local-runner": "^7.16.12",
-    "@wdio/mocha-framework": "^7.16.11",
-    "@wdio/spec-reporter": "^7.16.11",
+    "@wdio/allure-reporter": "^9.12.3",
+    "@wdio/cli": "^9.12.4",
+    "@wdio/local-runner": "^9.12.4",
+    "@wdio/mocha-framework": "^9.12.3",
+    "@wdio/spec-reporter": "^9.12.3",
+    "allure-commandline": "^2.33.0",
     "chai": "^4.3.7",
-    "chromedriver": "latest",
+    "chromedriver": "^135.0.1",
     "dotenv": "^16.4.7",
     "geckodriver": "latest",
+    "rimraf": "^6.0.1",
     "wdio-chromedriver-service": "^7.2.6",
     "wdio-geckodriver-service": "^3.0.2"
   }

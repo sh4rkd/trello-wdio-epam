@@ -48,14 +48,20 @@ exports.config = {
   reporters: [
     ['spec', {
       showPreface: false,
-      addConsoleLogs: false,
-      realtimeReporting: false,
+      addConsoleLogs: true,
+      realtimeReporting: true,
       symbols: {
         passed: '✓',
         failed: '✖',
         skipped: '-'
       },
       onlyFailures: false      
+    }],
+    ['allure', {
+      outputDir: 'allure-results',
+      disableWebdriverStepsReporting: false,
+      disableWebdriverScreenshotsReporting: false,
+      addConsoleLogs: true
     }]
   ],
 

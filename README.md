@@ -1,173 +1,128 @@
-# Trello WebdriverIO Testing Framework
+# Trello WebdriverIO Test Automation Framework
 
-This project implements an automated testing framework for the Trello application using WebdriverIO, Mocha, and Chai, built with a layered architecture approach.
+This project contains automated tests for the Trello application using WebdriverIO, Mocha, and Chai.
 
-## Requirements
+## Prerequisites
 
 - Node.js (v14 or higher)
 - npm (v6 or higher)
-- Browsers: Chrome (Firefox and Safari optional)
+- Chrome browser
+- Firefox browser (optional)
 
 ## Installation
 
-1. Clone this repository:
+1. Clone the repository:
 ```bash
-git clone https://github.com/sh4rkd/trello-wdio-epam.git
-cd trello-wdio-epam
+git clone https://github.com/sh4rkd/feature/report-integration
+cd trello-wdio-tests
 ```
 
-2. Switch to the layered-architecture branch:
-```bash
-git checkout layered-architecture
-```
-
-3. Install dependencies:
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-4. Make sure you have the correct version of Chai (4.3.7):
-```bash
-npm list chai
-```
+## Configuration
 
-## Project Structure
+The framework is configured in `wdio.conf.js`. Key configurations include:
 
-The framework follows a layered architecture pattern:
-
-```
-trello-wdio-tests/
-├── src/                      # Source code
-│   ├── core/                 # Core Layer (generic, reusable components)
-│   │   ├── elements/         # Element wrappers
-│   │   │   ├── button.js     # Button element wrapper
-│   │   │   ├── element.js    # Base element wrapper
-│   │   │   ├── index.js      # Elements exports
-│   │   │   └── input.js      # Input element wrapper
-│   │   ├── utils/            # Utility functions
-│   │   │   └── wait.js       # Wait utilities
-│   │   └── page.js           # Base Page Object
-│   │
-│   └── business/             # Business Layer (application-specific)
-│       └── pages/            # Page Objects organized by feature
-│           ├── login/        # Login-related pages
-│           ├── profile/      # Profile-related pages
-│           └── signup/       # Signup-related pages
-│
-├── test/                     # Test Layer
-│   ├── config/               # Test configurations
-│   │   └── wdio.conf.js      # WebdriverIO configuration
-│   └── specs/                # Test specifications
-│
-├── wdio.conf.js              # Main WebdriverIO config
-├── package.json              # Project dependencies
-└── README.md                 # This file
-```
-
-## Layered Architecture
-
-1. **Core Layer**: Contains base functionality that isn't project-specific
-   - Base Element class and specialized elements (Button, Input)
-   - Base Page class with common methods
-   - Utility functions for waiting and other operations
-
-2. **Business Layer**: Contains all application-specific functionality
-   - Page Objects organized by feature
-   - Business logic specific to the Trello application
-
-3. **Test Layer**: Contains test specifications and configurations
-   - Test specs that use the business layer
-   - Test configuration files
-
-## Implemented Features
-
-- ✅ Layered architecture following SOLID principles
-- ✅ WebdriverIO configured with Mocha
-- ✅ Chai assertion library with three interfaces (Assert, Should, Expect)
-- ✅ Execution in multiple browsers (Chrome, Firefox)
-- ✅ Parallel execution (2 instances)
-- ✅ Automatic retry (2 times) before marking a test as failed
-- ✅ Page Object Pattern for better maintainability
+- Browser capabilities (Chrome and Firefox)
+- Test framework (Mocha)
+- Reporters (Spec and Allure)
+- Timeouts and retry settings
+- Base URL and other test settings
 
 ## Running Tests
 
 ### Run all tests
-
 ```bash
-npm test
+npm run test
 ```
 
-### Run tests in specific browsers
-
+### Run specific test suites
 ```bash
-# Chrome only
+# Login tests
+npm run test:login
+
+# Signup tests
+npm run test:signup
+
+# Profile tests
+npm run test:profile
+
+# Logout tests
+npm run test:logout
+```
+
+### Run tests in specific browser
+```bash
+# Chrome
 npm run test:chrome
 
-# Firefox only
+# Firefox
 npm run test:firefox
 ```
 
-### Run specific test files
-
+### Run tests in parallel
 ```bash
-npm run test:login      # Login tests
-npm run test:logout     # Logout tests
-npm run test:profile    # Profile management tests
-npm run test:signup     # User registration tests
+npm run test:parallel
 ```
 
-## Test Scenarios
+## Test Reports
 
-The framework covers the following scenarios:
+The framework generates two types of reports:
 
-1. **User Authentication**
-   - Regular login
-   - First-time account setup
+### Spec Reporter
+- Shows test results in the console in real-time
+- Displays pass/fail status with symbols (✓, ✖, -)
+- Includes console logs for debugging
 
-2. **User Registration**
-   - Registration with different email formats
-   - Verification banner confirmation
+### Allure Reporter
+- Generates detailed HTML reports
+- Includes test steps, screenshots, and logs
+- Provides test execution statistics and trends
 
-3. **Profile Management**
-   - Username updates
-   - Bio updates
-   - Duplicate username error handling
+To generate and view Allure reports:
+```bash
+# Generate and open report
+npm run report:generate
 
-4. **Session Management**
-   - Secure logout
+# Clear previous reports
+npm run report:clear
+```
 
-## Chai Assertion Library
+## Project Structure
 
-The framework uses Chai assertion library with three different interfaces:
+```
+trello-wdio-tests/
+├── test/                    # Test files
+│   ├── login.spec.js       # Login test suite
+│   ├── signup.spec.js      # Signup test suite
+│   ├── profile.spec.js     # Profile test suite
+│   └── logout.spec.js      # Logout test suite
+├── src/                    # Source files
+│   └── core/              # Core framework files
+├── wdio.conf.js           # WebdriverIO configuration
+├── package.json           # Project dependencies
+└── README.md             # Project documentation
+```
 
-- **Assert** (login.spec.js): Traditional TDD assertion style
-  ```javascript
-  assert.isTrue(condition, 'message');
-  assert.include(string, substring, 'message');
-  ```
+## Test Data
 
-- **Should** (logout.spec.js): BDD chain-capable assertion style
-  ```javascript
-  someValue.should.equal(expectedValue);
-  array.should.include(value);
-  ```
+Test data is managed through environment variables. Create a `.env` file in the root directory with the following variables:
 
-- **Expect** (profile.spec.js): BDD chain-capable assertion style
-  ```javascript
-  expect(foo).to.equal('bar');
-  expect(someValue).to.be.true;
-  ```
+```
+TEST_USER_EMAIL=your-test-email@example.com
+TEST_USER_PASSWORD=your-test-password
+```
 
-## Design Principles
+## Contributing
 
-The framework follows these design principles:
+1. Create a feature branch
+2. Make your changes
+3. Run tests to ensure everything works
+4. Submit a pull request
 
-- **DRY** (Don't Repeat Yourself): Common functionality is extracted to base classes
-- **KISS** (Keep It Simple, Stupid): Each component has a clear, focused purpose
-- **YAGNI** (You Aren't Gonna Need It): Only necessary functionality is implemented
-- **SOLID**: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion
+## License
 
-## Important Notes
-
-- Make sure you have Node.js and npm installed before starting.
-- This project specifically uses Chai 4.3.7 due to compatibility requirements with CommonJS modules. Chai 5.x and above are ES modules and would require different import syntax.
+This project is licensed under the ISC License.
