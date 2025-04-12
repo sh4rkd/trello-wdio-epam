@@ -14,7 +14,11 @@
     "test:logout": "wdio run wdio.conf.js --spec ./test/logout.spec.js",
     "test:parallel": "wdio run wdio.conf.js --maxInstances=2",
     "report:generate": "npx allure-commandline generate allure-results --clean && npx allure-commandline open allure-report",
-    "report:clear": "rimraf allure-results allure-report"
+    "report:clear": "rimraf allure-results allure-report",
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix",
+    "format": "prettier --write \"**/*.{js,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,json,md}\""
   },
   "keywords": [
     "webdriverio",
@@ -35,7 +39,11 @@
     "chai": "^4.3.7",
     "chromedriver": "^135.0.1",
     "dotenv": "^16.4.7",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
     "geckodriver": "latest",
+    "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
     "wdio-chromedriver-service": "^7.2.6",
     "wdio-geckodriver-service": "^3.0.2"
