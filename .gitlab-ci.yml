@@ -10,12 +10,18 @@ cache:
 
 before_script:
   - npm install
+  - pwd
+  - ls -la
 
 lint:
   stage: lint
   script:
     - npm run lint
     - npm run format:check
+  artifacts:
+    paths:
+      - .eslintrc.json
+      - .prettierrc
 
 test:
   stage: test

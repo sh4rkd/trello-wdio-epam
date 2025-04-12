@@ -6,7 +6,7 @@ allure-results/
 allure-report/
 test-results/
 *.html
-*.json
+package-lock.json
 
 # IDE files
 .idea/
