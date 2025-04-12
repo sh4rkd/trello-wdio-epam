@@ -9,9 +9,17 @@ exports.config = {
   capabilities: [
     {
       browserName: 'chrome',
-      // 'goog:chromeOptions': {
-      //   args: ["--headless", "--disable-gpu", "--window-size=1920,1080"]
-      // },
+      'goog:chromeOptions': {
+        args: [
+          '--headless',
+          '--disable-gpu',
+          '--window-size=1920,1080',
+          '--no-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-setuid-sandbox',
+          '--user-data-dir=/tmp/chrome-data'
+        ]
+      },
       maxInstances: 2,
       acceptInsecureCerts: true,
     },
