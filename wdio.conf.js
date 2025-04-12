@@ -17,8 +17,8 @@ exports.config = {
           '--no-sandbox',
           '--disable-dev-shm-usage',
           '--disable-setuid-sandbox',
-          '--user-data-dir=/tmp/chrome-data'
-        ]
+          '--user-data-dir=/tmp/chrome-data',
+        ],
       },
       maxInstances: 2,
       acceptInsecureCerts: true,
