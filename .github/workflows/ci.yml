@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ quality-gates ]
+    branches: [ main, quality-gates, 'feature/**' ]
   pull_request:
-    branches: [ quality-gates ]
+    branches: [ main, quality-gates ]
 
 jobs:
   lint:
