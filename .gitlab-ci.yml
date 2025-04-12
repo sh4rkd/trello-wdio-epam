@@ -8,8 +8,21 @@ cache:
   paths:
     - node_modules/
 
+variables:
+  CHROME_BIN: /usr/bin/google-chrome
+  CHROME_PATH: /usr/bin/google-chrome
+
 before_script:
+  - apt-get update
+  - apt-get install -y wget gnupg
+  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+  - echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+  - apt-get update
+  - apt-get install -y google-chrome-stable
   - npm install
+  - npm install webdriverio@latest
+  - npm install @wdio/cli@latest
+  - npm install wdio-chromedriver-service@latest
   - pwd
   - ls -la
 
