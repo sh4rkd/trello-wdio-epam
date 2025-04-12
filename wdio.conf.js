@@ -38,7 +38,9 @@ exports.config = {
   connectionRetryCount: 3,
 
   services: [
-    'chromedriver',
+    ['chromedriver', {
+      // opciones del servicio si las necesitas
+    }],
     'geckodriver',
     // If on macOS, uncomment the next line
     // 'safaridriver'
