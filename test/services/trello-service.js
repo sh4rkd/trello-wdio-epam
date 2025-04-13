@@ -13,6 +13,31 @@ class TrelloService {
     }
   }
 
+  async cleanupBoards() {
+    try {
+      const response = await axios.get(`${this.baseUrl}/members/me/boards`, {
+        params: {
+          key: this.apiKey,
+          token: this.token
+        }
+      });
+
+      const boards = response.data;
+      console.log(`Found ${boards.length} boards`);
+
+      for (const board of boards) {
+        try {
+          await this.deleteBoard(board.id);
+          console.log(`Deleted board: ${board.name}`);
+        } catch (error) {
+          console.error(`Error deleting board ${board.name}:`, error.message);
+        }
+      }
+    } catch (error) {
+      console.error('Error cleaning up boards:', error.message);
+    }
+  }
+
   /**
    * Creates a new board
    * @param {string} name - Board name
@@ -26,24 +51,40 @@ class TrelloService {
         console.log(`Board description: "${options.desc}"`);
       }
       
+      // Intentar limpiar tableros antiguos si el espacio está lleno
+      await this.cleanupBoards();
+      
+      const url = `${this.baseUrl}/boards`;
       const params = {
+        name,
         key: this.apiKey,
         token: this.token,
-        name,
-        ...options
+        defaultLists: false
       };
+
+      if (options.desc) {
+        params.desc = options.desc;
+      }
       
-      const response = await axios({
-        method: 'post',
-        url: `${this.baseUrl}/boards`,
+      console.log('Request URL:', url);
+      console.log('Request params:', JSON.stringify(params, null, 2));
+      
+      const response = await axios.post(url, null, { 
         params,
-        headers: this.headers
+        headers: {
+          'Accept': 'application/json'
+        }
       });
       
+      console.log('Response:', JSON.stringify(response.data, null, 2));
       console.log(`Board created successfully: "${name}" with ID: ${response.data.id}`);
       return response;
     } catch (error) {
+      console.error('Full error:', error);
       console.error(`Error creating board "${name}":`, error.response ? `${error.response.status} - ${error.response.statusText}` : error.message);
+      if (error.response) {
+        console.error('Error response data:', JSON.stringify(error.response.data, null, 2));
+      }
       throw error;
     }
   }
@@ -68,7 +109,10 @@ class TrelloService {
         method: 'get',
         url: `${this.baseUrl}/boards/${boardId}`,
         params,
-        headers: this.headers
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
       });
       
       console.log(`Successfully retrieved board: "${response.data.name}" (ID: ${boardId})`);
@@ -100,7 +144,10 @@ class TrelloService {
         method: 'put',
         url: `${this.baseUrl}/boards/${boardId}`,
         params,
-        headers: this.headers
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
       });
       
       console.log(`Board successfully updated to: "${response.data.name}" (ID: ${boardId})`);
@@ -133,7 +180,10 @@ class TrelloService {
         method: 'delete',
         url: `${this.baseUrl}/boards/${boardId}`,
         params,
-        headers: this.headers
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
       });
       
       console.log(`Board successfully deleted (ID: ${boardId})`);
