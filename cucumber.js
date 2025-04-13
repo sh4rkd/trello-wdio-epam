@@ -1,9 +1,19 @@
+/**
+ * @fileoverview Configuración de Cucumber
+ */
+
+const config = require('./config/config');
+
 module.exports = {
-  default: {
-    requireModule: ['@babel/register'],
-    require: ['features/step_definitions/*.js', 'features/support/*.js'],
-    format: ['progress-bar', 'html:cucumber-report.html'],
-    formatOptions: { snippetInterface: 'async-await' },
-    publishQuiet: true
-  }
+  ...config.cucumber,
+  // Opciones adicionales específicas de Cucumber
+  publishQuiet: true,
+  retry: 1,
+  parallel: 2,
+  tags: process.env.TAGS || '',
+  worldParameters: {
+    baseUrl: config.trello.baseUrl,
+    apiKey: config.trello.apiKey,
+    token: config.trello.token,
+  },
 }; 

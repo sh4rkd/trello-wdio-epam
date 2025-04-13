@@ -1,149 +1,146 @@
-# Trello API Testing Framework
+# Trello API Test Automation Framework
 
-This project implements an automated testing framework for the Trello REST API using Axios, Mocha, and Chai, focused on board management operations.
+A comprehensive test automation framework for Trello API using WebdriverIO, Cucumber, and best practices in software testing.
 
-## Requirements
+## 🚀 Features
+
+- **BDD Testing**: Cucumber integration for behavior-driven development
+- **API Testing**: Complete coverage of Trello API endpoints
+- **Repository Pattern**: Clean architecture implementation
+- **Automated Cleanup**: Automatic resource management
+- **CI/CD Ready**: Configured for continuous integration
+- **Comprehensive Documentation**: JSDoc comments and clear code structure
+
+## 📋 Prerequisites
 
 - Node.js (v14 or higher)
 - npm (v6 or higher)
-- Valid Trello API credentials
+- Trello API credentials (API Key and Token)
 
-## Installation
+## 🛠️ Installation
 
-1. Clone this repository:
+1. Clone the repository:
 ```bash
-git clone https://github.com/sh4rkd/trello-wdio-epam.git
-cd trello-wdio-epam
+git clone https://github.com/yourusername/trello-wdio-tests.git
+cd trello-wdio-tests
 ```
 
-2. Switch to the api-testing branch:
-```bash
-git checkout api-testing
-```
-
-3. Install dependencies:
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-4. Set up your environment variables:
-```bash
-cp .env.example .env
+3. Configure environment variables:
+Create a `.env` file in the root directory with your Trello credentials:
+```env
+TRELLO_API_KEY=your_api_key
+TRELLO_API_TOKEN=your_api_token
 ```
 
-5. Edit the `.env` file with your Trello API credentials:
-```
-TRELLO_API_KEY=your_api_key_here
-TRELLO_API_TOKEN=your_api_token_here
-```
-
-You can get your API credentials from [Trello's Developer API Keys page](https://trello.com/app-key).
-
-## Project Structure
-
-The framework follows a clean, organized structure:
+## 🏗️ Project Structure
 
 ```
-trello-api-tests/
-├── test/                     # Test-related code
-│   ├── api/                  # API test specifications
-│   │   └── board.test.js     # Board API tests
-│   ├── config/               # Configuration files
-│   │   └── api-config.js     # API configuration
-│   ├── services/             # API service wrappers
-│   │   └── trello-service.js # Trello API service
-│   └── utils/                # Utilities
-│       └── response-validator.js # Response validation helper
-│
-├── .env                      # Environment variables (not in repo)
-├── .env.example              # Example environment variables
-├── package.json              # Project dependencies
-└── README.md                 # Project documentation
+trello-wdio-tests/
+├── config/                 # Configuration files
+├── features/              # Cucumber feature files
+│   ├── step_definitions/  # Step definitions
+│   └── support/          # Support files and hooks
+├── src/
+│   ├── services/         # API services
+│   └── utils/           # Utility functions
+├── test/                 # Test files
+└── reports/             # Test reports
 ```
 
-## Implemented Features
+## 🧪 Running Tests
 
-- ✅ Complete Trello board API testing
-- ✅ Environment-based configuration
-- ✅ Axios for HTTP requests
-- ✅ Mocha test framework with Chai assertions
-- ✅ Response validation utilities
-- ✅ Error handling and logging
-
-## Test Scenarios
-
-The framework covers the following API operations:
-
-1. **Board Management**
-   - Create a new board
-   - Get board details
-   - Update board properties
-   - Delete a board
-
-Each test includes assertions for:
-- HTTP status codes
-- Response headers
-- Response body validation
-- Error scenarios
-
-## Running Tests
-
-### Run all tests
-
+### Running All Tests
 ```bash
 npm test
 ```
 
-### Run only board tests
-
+### Running Cucumber Tests
 ```bash
-npm run test:board
+npm run test:cucumber
 ```
 
-### Run tests with detailed reporting
-
+### Running Tests in CI Mode
 ```bash
 npm run test:ci
 ```
 
-## API Service Layer
+## 📚 Test Coverage
 
-The framework implements a service layer that abstracts the Trello API calls:
+The framework includes tests for the following Trello API endpoints:
 
-- **TrelloService**: Handles all communication with the Trello API
-  - `createBoard(name, options)`: Creates a new board
-  - `getBoard(boardId, options)`: Retrieves board details
-  - `updateBoard(boardId, updateData)`: Updates board properties
-  - `deleteBoard(boardId)`: Deletes a board
+- Board Management
+  - Create board
+  - Get board details
+  - Update board
+  - Delete board
+- List Management
+  - Get board lists
+  - Create list
+- Card Management
+  - Get board cards
+- Checklist Management
+  - Get board checklists
+- Member Management
+  - Get board members
 
-## Response Validation
+## 🔧 Configuration
 
-The `ResponseValidator` utility provides methods to validate API responses:
+### WebdriverIO Configuration
+Located in `config/wdio.conf.js`:
+- Browser settings
+- Test framework configuration
+- Reporter settings
+- Timeout configurations
 
-- `validateBasicResponse(response, expectedStatus)`: Validates status and headers
-- `validateResponseProperties(responseBody, expectedProps)`: Validates response body properties
+### Cucumber Configuration
+Located in `cucumber.js`:
+- Feature file locations
+- Step definition patterns
+- Report formats
+- Timeout settings
 
-## Error Handling
+## 🏭 Design Patterns
 
-The framework implements comprehensive error handling:
-- Detailed error messages
-- API error response logging
-- Test skipping when credentials are missing
+The framework implements several design patterns:
 
-## Best Practices
+- **Repository Pattern**: For API interactions
+- **Singleton Pattern**: For service instances
+- **Factory Pattern**: For resource creation
+- **Builder Pattern**: For request construction
 
-This framework follows several best practices:
+## 📝 Best Practices
 
-- **Clean Code**: Minimal, focused components with clear responsibilities
-- **DRY (Don't Repeat Yourself)**: Common functionality extracted to utility methods
-- **Configuration Management**: Environment variables for credentials
-- **Separation of Concerns**: Tests, services, and utilities are kept separate
-- **Proper Error Handling**: All API requests properly handle and report errors
-- **Comprehensive Testing**: Each API endpoint is thoroughly tested
+- Clean Code principles
+- SOLID principles
+- DRY (Don't Repeat Yourself)
+- Comprehensive error handling
+- Automatic resource cleanup
+- Detailed logging
+- Clear documentation
 
-## Important Notes
+## 🤝 Contributing
 
-- Make sure your Trello API credentials have the necessary permissions
-- The framework automatically creates and removes test data
-- Tests are designed to be idempotent and can be run multiple times
-- API rate limits may apply when running tests repeatedly
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👥 Authors
+
+- Fred Miramontes - Initial work
+
+## 🙏 Acknowledgments
+
+- Trello API Documentation
+- WebdriverIO Team
+- Cucumber.js Team
