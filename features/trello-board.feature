@@ -26,4 +26,30 @@ Feature: Trello Board Management
     Given I have a board
     When I delete the board
     Then the board should be deleted successfully
-    And the board should no longer be accessible 
+    And the board should no longer be accessible
+
+  Scenario: Get lists on a board
+    Given I have a board
+    When I request the lists on the board
+    Then I should receive the list of lists successfully
+
+  Scenario: Get cards on a board
+    Given I have a board
+    When I request the cards on the board
+    Then I should receive the list of cards successfully
+
+  Scenario: Get checklists on a board
+    Given I have a board
+    When I request the checklists on the board
+    Then I should receive the list of checklists successfully
+
+  Scenario: Get members of a board
+    Given I have a board
+    When I request the members of the board
+    Then I should receive the list of members successfully
+
+  Scenario: Create list on a board
+    Given I have a board
+    When I create a new list with name "Test List"
+    Then the list should be created successfully
+    And the list should have the correct name 

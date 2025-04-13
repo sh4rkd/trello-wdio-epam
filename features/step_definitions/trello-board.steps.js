@@ -1,11 +1,13 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { expect } = require('chai');
 const trelloService = require('../../test/services/trello-service');
+const axios = require('axios');
 
 let boardId;
 let boardName;
 let boardDescription;
 let response;
+let listName;
 
 Given('I have valid Trello API credentials', function () {
   expect(process.env.TRELLO_API_KEY).to.exist;
@@ -87,4 +89,81 @@ Then('the board should no longer be accessible', async function () {
   } catch (error) {
     expect(error.response.status).to.equal(404);
   }
+});
+
+When('I request the lists on the board', async function () {
+  response = await axios.get(`${trelloService.baseUrl}/boards/${boardId}/lists`, {
+    params: {
+      key: trelloService.apiKey,
+      token: trelloService.token
+    }
+  });
+});
+
+Then('I should receive the list of lists successfully', function () {
+  expect(response.status).to.equal(200);
+  expect(response.data).to.be.an('array');
+});
+
+When('I request the cards on the board', async function () {
+  response = await axios.get(`${trelloService.baseUrl}/boards/${boardId}/cards`, {
+    params: {
+      key: trelloService.apiKey,
+      token: trelloService.token
+    }
+  });
+});
+
+Then('I should receive the list of cards successfully', function () {
+  expect(response.status).to.equal(200);
+  expect(response.data).to.be.an('array');
+});
+
+When('I request the checklists on the board', async function () {
+  response = await axios.get(`${trelloService.baseUrl}/boards/${boardId}/checklists`, {
+    params: {
+      key: trelloService.apiKey,
+      token: trelloService.token
+    }
+  });
+});
+
+Then('I should receive the list of checklists successfully', function () {
+  expect(response.status).to.equal(200);
+  expect(response.data).to.be.an('array');
+});
+
+When('I request the members of the board', async function () {
+  response = await axios.get(`${trelloService.baseUrl}/boards/${boardId}/members`, {
+    params: {
+      key: trelloService.apiKey,
+      token: trelloService.token
+    }
+  });
+});
+
+Then('I should receive the list of members successfully', function () {
+  expect(response.status).to.equal(200);
+  expect(response.data).to.be.an('array');
+});
+
+When('I create a new list with name {string}', async function (name) {
+  listName = name;
+  response = await axios.post(`${trelloService.baseUrl}/lists`, null, {
+    params: {
+      name: name,
+      idBoard: boardId,
+      key: trelloService.apiKey,
+      token: trelloService.token
+    }
+  });
+});
+
+Then('the list should be created successfully', function () {
+  expect(response.status).to.equal(200);
+  expect(response.data.id).to.exist;
+});
+
+Then('the list should have the correct name', function () {
+  expect(response.data.name).to.equal(listName);
 }); 
