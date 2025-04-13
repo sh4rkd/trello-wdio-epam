@@ -104,6 +104,30 @@ Located in `cucumber.js`:
 - Report formats
 - Timeout settings
 
+## 🚀 Continuous Integration
+
+The project is configured with GitHub Actions for continuous integration. The CI pipeline:
+
+1. Runs on push to `BDD-with-Cucumber` branch and pull requests
+2. Tests against Node.js 16.x and 18.x
+3. Uses GitHub Secrets for secure credential management
+4. Generates and publishes test reports
+
+### Setting up CI
+
+1. Fork the repository
+2. Go to your repository's Settings > Secrets and Variables > Actions
+3. Add the following secrets:
+   - `TRELLO_API_KEY`: Your Trello API Key
+   - `TRELLO_API_TOKEN`: Your Trello API Token
+
+The CI workflow will automatically:
+- Install dependencies
+- Create the .env file with your secrets
+- Run the tests
+- Generate and publish test reports
+- Upload test artifacts
+
 ## 🏭 Design Patterns
 
 The framework implements several design patterns:
@@ -129,7 +153,7 @@ The framework implements several design patterns:
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+5. Open a Pull Request to the `BDD-with-Cucumber` branch
 
 ## 📄 License
 

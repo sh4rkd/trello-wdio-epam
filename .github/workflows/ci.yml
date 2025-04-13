@@ -1,0 +1,54 @@
+name: Trello API Tests CI
+
+on:
+  push:
+    branches: [ BDD-with-Cucumber ]
+  pull_request:
+    branches: [ BDD-with-Cucumber ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Create .env file
+      run: |
+        echo "TRELLO_API_KEY=${{ secrets.TRELLO_API_KEY }}" >> .env
+        echo "TRELLO_API_TOKEN=${{ secrets.TRELLO_API_TOKEN }}" >> .env
+        echo "TRELLO_KEY=${{ secrets.TRELLO_API_KEY }}" >> .env
+        echo "TRELLO_TOKEN=${{ secrets.TRELLO_API_TOKEN }}" >> .env
+
+    - name: Run tests
+      run: npm run test:ci
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: |
+          reports/
+          cucumber_report.json
+          cucumber-report.html
+
+    - name: Publish Cucumber Report
+      if: always()
+      uses: cucumber-actions/cucumber-report@v1
+      with:
+        json: cucumber_report.json
+        token: ${{ secrets.GITHUB_TOKEN }} 
