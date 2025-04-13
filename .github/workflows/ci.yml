@@ -40,6 +40,58 @@ jobs:
     - name: Create .env file
       run: |
         cat > .env << EOL
+        #add mores posibilities to find the secrets 
+        # Debugging secrets and variables
+        echo "Debugging secrets and variables..."
+        
+        # Check GitHub Actions context variables
+        echo "GitHub Actions Context:"
+        echo "GITHUB_REF: $GITHUB_REF"
+        echo "GITHUB_SHA: $GITHUB_SHA"
+        echo "GITHUB_WORKFLOW: $GITHUB_WORKFLOW"
+        echo "GITHUB_ACTOR: $GITHUB_ACTOR"
+        
+        # Check environment variables
+        echo "Environment Variables:"
+        env | grep -i "TRELLO\|GITHUB\|NODE" || true
+        
+        # Check GitHub Actions variables
+        echo "GitHub Actions Variables:"
+        echo "github.event_name: ${{ github.event_name }}"
+        echo "github.repository: ${{ github.repository }}"
+        echo "github.workspace: ${{ github.workspace }}"
+        
+        # Check secrets availability with more detail
+        echo "Secrets Status:"
+        if [ -n "${{ secrets.TRELLO_API_KEY }}" ]; then 
+          echo "TRELLO_API_KEY is set (length: ${#TRELLO_API_KEY})"
+        else 
+          echo "TRELLO_API_KEY is NOT set"
+        fi
+        
+        if [ -n "${{ secrets.TRELLO_API_TOKEN }}" ]; then 
+          echo "TRELLO_API_TOKEN is set (length: ${#TRELLO_API_TOKEN})"
+        else 
+          echo "TRELLO_API_TOKEN is NOT set"
+        fi
+        
+        # Check for alternative secret names
+        echo "Checking alternative secret names..."
+        if [ -n "${{ secrets.TRELLO_KEY }}" ]; then echo "TRELLO_KEY is set"; fi
+        if [ -n "${{ secrets.TRELLO_TOKEN }}" ]; then echo "TRELLO_TOKEN is set"; fi
+        if [ -n "${{ secrets.TRELLO_ACCESS_KEY }}" ]; then echo "TRELLO_ACCESS_KEY is set"; fi
+        if [ -n "${{ secrets.TRELLO_ACCESS_TOKEN }}" ]; then echo "TRELLO_ACCESS_TOKEN is set"; fi
+        
+        # Check repository variables
+        echo "Repository Variables:"
+        if [ -n "${{ vars.TRELLO_API_KEY }}" ]; then echo "TRELLO_API_KEY in vars is set"; fi
+        if [ -n "${{ vars.TRELLO_API_TOKEN }}" ]; then echo "TRELLO_API_TOKEN in vars is set"; fi
+        
+        # Print masked versions for debugging
+        echo "Masked Secrets:"
+        echo "TRELLO_API_KEY: ${TRELLO_API_KEY:0:4}...${TRELLO_API_KEY: -4}"
+        echo "TRELLO_API_TOKEN: ${TRELLO_API_TOKEN:0:4}...${TRELLO_API_TOKEN: -4}"
+        secrets=${{ secrets}}
         TRELLO_API_KEY=${{ secrets.TRELLO_API_KEY }}
         TRELLO_API_TOKEN=${{ secrets.TRELLO_API_TOKEN }}
         TRELLO_KEY=${{ secrets.TRELLO_API_KEY }}
