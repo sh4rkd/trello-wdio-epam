@@ -46,7 +46,11 @@ jobs:
         TRELLO_TOKEN: ${{ secrets.TRELLO_API_TOKEN }}
         CUCUMBER_PUBLISH_QUIET: true
       run: |
-        npx @cucumber/cucumber --format json:cucumber_report.json --require features/**/*.js
+        npx @cucumber/cucumber \
+          --format json:cucumber_report.json \
+          --require features/step_definitions/**/*.js \
+          --require features/support/**/*.js \
+          features/**/*.feature
 
     - name: Archive test results
       if: always()
