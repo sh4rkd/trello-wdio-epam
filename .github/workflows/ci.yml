@@ -28,15 +28,25 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-    - name: Create .env file
-      run: |
-        echo "TRELLO_API_KEY=${{ secrets.TRELLO_API_KEY }}" > .env
-        echo "TRELLO_API_TOKEN=${{ secrets.TRELLO_API_TOKEN }}" >> .env
-        echo "TRELLO_KEY=${{ secrets.TRELLO_API_KEY }}" >> .env
-        echo "TRELLO_TOKEN=${{ secrets.TRELLO_API_TOKEN }}" >> .env
-
     - name: Install dependencies
       run: npm ci
+
+    - name: Debug Environment
+      run: |
+        echo "Checking secrets availability..."
+        if [ -n "${{ secrets.TRELLO_API_KEY }}" ]; then echo "TRELLO_API_KEY is set"; else echo "TRELLO_API_KEY is NOT set"; fi
+        if [ -n "${{ secrets.TRELLO_API_TOKEN }}" ]; then echo "TRELLO_API_TOKEN is set"; else echo "TRELLO_API_TOKEN is NOT set"; fi
+
+    - name: Create .env file
+      run: |
+        cat > .env << EOL
+        TRELLO_API_KEY=${{ secrets.TRELLO_API_KEY }}
+        TRELLO_API_TOKEN=${{ secrets.TRELLO_API_TOKEN }}
+        TRELLO_KEY=${{ secrets.TRELLO_API_KEY }}
+        TRELLO_TOKEN=${{ secrets.TRELLO_API_TOKEN }}
+        EOL
+        echo "Created .env file"
+        ls -la .env
 
     - name: Run tests
       env:
@@ -44,8 +54,12 @@ jobs:
         TRELLO_API_TOKEN: ${{ secrets.TRELLO_API_TOKEN }}
         TRELLO_KEY: ${{ secrets.TRELLO_API_KEY }}
         TRELLO_TOKEN: ${{ secrets.TRELLO_API_TOKEN }}
+        NODE_ENV: test
         CUCUMBER_PUBLISH_QUIET: true
       run: |
+        echo "Running tests with Node $(node -v)"
+        echo "Environment variables set:"
+        env | grep -i TRELLO || true
         npx @cucumber/cucumber \
           --format json:cucumber_report.json \
           --require features/step_definitions/**/*.js \
