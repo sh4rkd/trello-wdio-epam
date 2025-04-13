@@ -1,31 +1,31 @@
 /**
- * @fileoverview Utilidades para las pruebas
+ * @fileoverview Utilities for tests
  * @module utils/test.utils
  */
 
 /**
- * Genera un nombre único para un tablero
- * @param {string} prefix - Prefijo para el nombre
- * @returns {string} Nombre único
+ * Generates a unique name for a board
+ * @param {string} prefix - Prefix for the name
+ * @returns {string} Unique name
  */
 function generateUniqueBoardName(prefix = 'Test Board') {
   return `${prefix} ${Date.now()}`;
 }
 
 /**
- * Verifica que una respuesta sea exitosa
- * @param {Object} response - Respuesta de la API
- * @returns {boolean} true si la respuesta es exitosa
+ * Verifies that a response is successful
+ * @param {Object} response - API response
+ * @returns {boolean} true if the response is successful
  */
 function isSuccessfulResponse(response) {
   return response && response.status >= 200 && response.status < 300;
 }
 
 /**
- * Verifica que un objeto tenga las propiedades requeridas
- * @param {Object} obj - Objeto a verificar
- * @param {Array<string>} requiredProps - Lista de propiedades requeridas
- * @returns {boolean} true si el objeto tiene todas las propiedades requeridas
+ * Verifies that an object has the required properties
+ * @param {Object} obj - Object to verify
+ * @param {Array<string>} requiredProps - List of required properties
+ * @returns {boolean} true if the object has all required properties
  */
 function hasRequiredProperties(obj, requiredProps) {
   return requiredProps.every(prop => obj.hasOwnProperty(prop));

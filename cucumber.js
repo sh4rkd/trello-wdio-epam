@@ -1,12 +1,12 @@
 /**
- * @fileoverview Configuración de Cucumber
+ * @fileoverview Cucumber configuration
  */
 
 const config = require('./config/config');
 
 module.exports = {
   ...config.cucumber,
-  // Opciones adicionales específicas de Cucumber
+  // Additional Cucumber-specific options
   publishQuiet: true,
   retry: 1,
   parallel: 2,

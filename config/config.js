@@ -1,5 +1,5 @@
 /**
- * @fileoverview Configuración centralizada del proyecto
+ * @fileoverview Centralized project configuration
  * @module config/config
  */
 
@@ -7,7 +7,7 @@ require('dotenv').config();
 
 module.exports = {
   /**
-   * Configuración de la API de Trello
+   * Trello API configuration
    */
   trello: {
     apiKey: process.env.TRELLO_API_KEY,
@@ -17,7 +17,7 @@ module.exports = {
   },
 
   /**
-   * Configuración de las pruebas
+   * Test configuration
    */
   test: {
     retries: 2,
@@ -30,7 +30,7 @@ module.exports = {
   },
 
   /**
-   * Configuración de Cucumber
+   * Cucumber configuration
    */
   cucumber: {
     requireModule: ['@babel/register'],

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Servicio base para manejar peticiones HTTP
+ * @fileoverview Base service for handling HTTP requests
  * @module services/base.service
  */
 
@@ -8,14 +8,14 @@ const config = require('../../config/config');
 
 /**
  * @class BaseService
- * @description Clase base para servicios que realizan peticiones HTTP
+ * @description Base class for services that make HTTP requests
  */
 class BaseService {
   /**
    * @constructor
-   * @param {Object} options - Opciones de configuración
-   * @param {string} options.baseURL - URL base para las peticiones
-   * @param {number} options.timeout - Tiempo de espera para las peticiones
+   * @param {Object} options - Configuration options
+   * @param {string} options.baseURL - Base URL for requests
+   * @param {number} options.timeout - Request timeout
    */
   constructor(options = {}) {
     this.client = axios.create({
@@ -28,10 +28,10 @@ class BaseService {
   }
 
   /**
-   * Realiza una petición GET
-   * @param {string} url - URL del endpoint
-   * @param {Object} params - Parámetros de la petición
-   * @returns {Promise<Object>} Respuesta de la petición
+   * Makes a GET request
+   * @param {string} url - Endpoint URL
+   * @param {Object} params - Request parameters
+   * @returns {Promise<Object>} Request response
    */
   async get(url, params = {}) {
     try {
@@ -43,11 +43,11 @@ class BaseService {
   }
 
   /**
-   * Realiza una petición POST
-   * @param {string} url - URL del endpoint
-   * @param {Object} data - Datos a enviar
-   * @param {Object} params - Parámetros de la petición
-   * @returns {Promise<Object>} Respuesta de la petición
+   * Makes a POST request
+   * @param {string} url - Endpoint URL
+   * @param {Object} data - Data to send
+   * @param {Object} params - Request parameters
+   * @returns {Promise<Object>} Request response
    */
   async post(url, data = {}, params = {}) {
     try {
@@ -59,11 +59,11 @@ class BaseService {
   }
 
   /**
-   * Realiza una petición PUT
-   * @param {string} url - URL del endpoint
-   * @param {Object} data - Datos a enviar
-   * @param {Object} params - Parámetros de la petición
-   * @returns {Promise<Object>} Respuesta de la petición
+   * Makes a PUT request
+   * @param {string} url - Endpoint URL
+   * @param {Object} data - Data to send
+   * @param {Object} params - Request parameters
+   * @returns {Promise<Object>} Request response
    */
   async put(url, data = {}, params = {}) {
     try {
@@ -75,10 +75,10 @@ class BaseService {
   }
 
   /**
-   * Realiza una petición DELETE
-   * @param {string} url - URL del endpoint
-   * @param {Object} params - Parámetros de la petición
-   * @returns {Promise<Object>} Respuesta de la petición
+   * Makes a DELETE request
+   * @param {string} url - Endpoint URL
+   * @param {Object} params - Request parameters
+   * @returns {Promise<Object>} Request response
    */
   async delete(url, params = {}) {
     try {
@@ -90,9 +90,9 @@ class BaseService {
   }
 
   /**
-   * Maneja los errores de las peticiones
-   * @param {Error} error - Error de la petición
-   * @throws {Error} Error con información detallada
+   * Handles request errors
+   * @param {Error} error - Request error
+   * @throws {Error} Error with detailed information
    */
   handleError(error) {
     if (error.response) {
