@@ -6,13 +6,18 @@ on:
   pull_request:
     branches: [ BDD-with-Cucumber ]
 
+permissions:
+  contents: read
+  checks: write
+  id-token: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [14.x, 16.x]
 
     steps:
     - uses: actions/checkout@v3
@@ -36,19 +41,24 @@ jobs:
     - name: Run tests
       run: npm run test:ci
 
-    - name: Upload test results
+    - name: Archive test results
       if: always()
-      uses: actions/upload-artifact@v2
+      run: |
+        mkdir -p artifacts
+        cp -r reports/* artifacts/ || true
+        cp cucumber_report.json artifacts/ || true
+        cp cucumber-report.html artifacts/ || true
+
+    - name: Upload test artifacts
+      if: always()
+      uses: actions/upload-artifact@main
       with:
         name: test-results
-        path: |
-          reports/
-          cucumber_report.json
-          cucumber-report.html
+        path: artifacts/
 
     - name: Publish Cucumber Report
       if: always()
-      uses: cucumber-actions/cucumber-report@v1
+      uses: deblockt/cucumber-report-annotations-action@v1.7
       with:
-        json: cucumber_report.json
-        token: ${{ secrets.GITHUB_TOKEN }} 
+        access-token: ${{ secrets.GITHUB_TOKEN }}
+        path: "**/cucumber-report.json" 
