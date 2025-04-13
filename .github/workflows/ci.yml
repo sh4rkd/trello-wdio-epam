@@ -14,6 +14,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: test
 
     strategy:
       matrix:
@@ -31,92 +32,121 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Debug Environment
+    - name: Super Debug Environment
       run: |
-        echo "Checking secrets availability..."
-        if [ -n "${{ secrets.TRELLO_API_KEY }}" ]; then echo "TRELLO_API_KEY is set"; else echo "TRELLO_API_KEY is NOT set"; fi
-        if [ -n "${{ secrets.TRELLO_API_TOKEN }}" ]; then echo "TRELLO_API_TOKEN is set"; else echo "TRELLO_API_TOKEN is NOT set"; fi
+        echo "=== GitHub Context Variables ==="
+        echo "GITHUB_WORKFLOW: $GITHUB_WORKFLOW"
+        echo "GITHUB_ACTION: $GITHUB_ACTION"
+        echo "GITHUB_ACTOR: $GITHUB_ACTOR"
+        echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY"
+        echo "GITHUB_EVENT_NAME: $GITHUB_EVENT_NAME"
+        echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+        echo "GITHUB_SHA: $GITHUB_SHA"
+        echo "GITHUB_REF: $GITHUB_REF"
+        
+        echo "\n=== Environment Variables ==="
+        env | sort
+        
+        echo "\n=== Secrets Check (will only show true/false) ==="
+        echo "secrets.TRELLO_API_KEY exists: ${{ secrets.TRELLO_API_KEY != '' }}"
+        echo "secrets.TRELLO_API_TOKEN exists: ${{ secrets.TRELLO_API_TOKEN != '' }}"
+        echo "secrets.TRELLO_KEY exists: ${{ secrets.TRELLO_KEY != '' }}"
+        echo "secrets.TRELLO_TOKEN exists: ${{ secrets.TRELLO_TOKEN != '' }}"
+        
+        echo "\n=== Variables Check ==="
+        echo "vars.TRELLO_API_KEY exists: ${{ vars.TRELLO_API_KEY != '' }}"
+        echo "vars.TRELLO_API_TOKEN exists: ${{ vars.TRELLO_API_TOKEN != '' }}"
+        echo "vars.TRELLO_KEY exists: ${{ vars.TRELLO_KEY != '' }}"
+        echo "vars.TRELLO_TOKEN exists: ${{ vars.TRELLO_TOKEN != '' }}"
+        
+        echo "\n=== Environment Variables Detail ==="
+        echo "Current Environment: ${{ env.ENVIRONMENT }}"
+        echo "Current Environment Name: ${{ env.ENVIRONMENT_NAME }}"
+        
+        echo "\n=== Runner Context ==="
+        echo "Runner OS: ${{ runner.os }}"
+        echo "Runner Name: ${{ runner.name }}"
+        echo "Runner Temp: ${{ runner.temp }}"
+        echo "Workspace: ${{ runner.workspace }}"
+        
+        echo "\n=== GitHub Context ==="
+        echo "Event Name: ${{ github.event_name }}"
+        echo "Repository: ${{ github.repository }}"
+        echo "Ref: ${{ github.ref }}"
+        echo "SHA: ${{ github.sha }}"
+        echo "Workspace: ${{ github.workspace }}"
+        
+        echo "\n=== Job Context ==="
+        echo "Job ID: ${{ job.id }}"
+        echo "Job Container ID: ${{ job.container.id }}"
+        echo "Job Services: ${{ job.services }}"
+        
+        echo "\n=== Steps Context ==="
+        echo "Current Step ID: ${{ steps.id }}"
+        echo "Current Step Number: ${{ steps.number }}"
+        
+        echo "\n=== All Environment Variables ==="
+        printenv
 
     - name: Create .env file
       run: |
-        cat > .env << EOL
-        #add mores posibilities to find the secrets 
-        # Debugging secrets and variables
-        echo "Debugging secrets and variables..."
+        echo "Creating .env file with all possible combinations..."
         
-        # Check GitHub Actions context variables
-        echo "GitHub Actions Context:"
-        echo "GITHUB_REF: $GITHUB_REF"
-        echo "GITHUB_SHA: $GITHUB_SHA"
-        echo "GITHUB_WORKFLOW: $GITHUB_WORKFLOW"
-        echo "GITHUB_ACTOR: $GITHUB_ACTOR"
+        # Direct secrets
+        echo "TRELLO_API_KEY=${{ secrets.TRELLO_API_KEY }}" >> .env
+        echo "TRELLO_API_TOKEN=${{ secrets.TRELLO_API_TOKEN }}" >> .env
+        echo "TRELLO_KEY=${{ secrets.TRELLO_KEY }}" >> .env
+        echo "TRELLO_TOKEN=${{ secrets.TRELLO_TOKEN }}" >> .env
         
-        # Check environment variables
-        echo "Environment Variables:"
-        env | grep -i "TRELLO\|GITHUB\|NODE" || true
+        # Variables if they exist
+        echo "TRELLO_API_KEY_VAR=${{ vars.TRELLO_API_KEY }}" >> .env
+        echo "TRELLO_API_TOKEN_VAR=${{ vars.TRELLO_API_TOKEN }}" >> .env
         
-        # Check GitHub Actions variables
-        echo "GitHub Actions Variables:"
-        echo "github.event_name: ${{ github.event_name }}"
-        echo "github.repository: ${{ github.repository }}"
-        echo "github.workspace: ${{ github.workspace }}"
+        # Environment variables if they exist
+        echo "TRELLO_API_KEY_ENV=${{ env.TRELLO_API_KEY }}" >> .env
+        echo "TRELLO_API_TOKEN_ENV=${{ env.TRELLO_API_TOKEN }}" >> .env
         
-        # Check secrets availability with more detail
-        echo "Secrets Status:"
-        if [ -n "${{ secrets.TRELLO_API_KEY }}" ]; then 
-          echo "TRELLO_API_KEY is set (length: ${#TRELLO_API_KEY})"
-        else 
-          echo "TRELLO_API_KEY is NOT set"
-        fi
-        
-        if [ -n "${{ secrets.TRELLO_API_TOKEN }}" ]; then 
-          echo "TRELLO_API_TOKEN is set (length: ${#TRELLO_API_TOKEN})"
-        else 
-          echo "TRELLO_API_TOKEN is NOT set"
-        fi
-        
-        # Check for alternative secret names
-        echo "Checking alternative secret names..."
-        if [ -n "${{ secrets.TRELLO_KEY }}" ]; then echo "TRELLO_KEY is set"; fi
-        if [ -n "${{ secrets.TRELLO_TOKEN }}" ]; then echo "TRELLO_TOKEN is set"; fi
-        if [ -n "${{ secrets.TRELLO_ACCESS_KEY }}" ]; then echo "TRELLO_ACCESS_KEY is set"; fi
-        if [ -n "${{ secrets.TRELLO_ACCESS_TOKEN }}" ]; then echo "TRELLO_ACCESS_TOKEN is set"; fi
-        
-        # Check repository variables
-        echo "Repository Variables:"
-        if [ -n "${{ vars.TRELLO_API_KEY }}" ]; then echo "TRELLO_API_KEY in vars is set"; fi
-        if [ -n "${{ vars.TRELLO_API_TOKEN }}" ]; then echo "TRELLO_API_TOKEN in vars is set"; fi
-        
-        # Print masked versions for debugging
-        echo "Masked Secrets:"
-        echo "TRELLO_API_KEY: ${TRELLO_API_KEY:0:4}...${TRELLO_API_KEY: -4}"
-        echo "TRELLO_API_TOKEN: ${TRELLO_API_TOKEN:0:4}...${TRELLO_API_TOKEN: -4}"
-        secrets=${{ secrets}}
-        TRELLO_API_KEY=${{ secrets.TRELLO_API_KEY }}
-        TRELLO_API_TOKEN=${{ secrets.TRELLO_API_TOKEN }}
-        TRELLO_KEY=${{ secrets.TRELLO_API_KEY }}
-        TRELLO_TOKEN=${{ secrets.TRELLO_API_TOKEN }}
-        EOL
-        echo "Created .env file"
-        ls -la .env
+        echo "=== Content of .env file (masked) ==="
+        cat .env | sed 's/\(.*=\).*/\1****/'
 
     - name: Run tests
       env:
+        # Try all possible combinations
         TRELLO_API_KEY: ${{ secrets.TRELLO_API_KEY }}
         TRELLO_API_TOKEN: ${{ secrets.TRELLO_API_TOKEN }}
-        TRELLO_KEY: ${{ secrets.TRELLO_API_KEY }}
-        TRELLO_TOKEN: ${{ secrets.TRELLO_API_TOKEN }}
+        TRELLO_KEY: ${{ secrets.TRELLO_KEY }}
+        TRELLO_TOKEN: ${{ secrets.TRELLO_TOKEN }}
+        TRELLO_API_KEY_VAR: ${{ vars.TRELLO_API_KEY }}
+        TRELLO_API_TOKEN_VAR: ${{ vars.TRELLO_API_TOKEN }}
+        TRELLO_API_KEY_ENV: ${{ env.TRELLO_API_KEY }}
+        TRELLO_API_TOKEN_ENV: ${{ env.TRELLO_API_TOKEN }}
         NODE_ENV: test
         CUCUMBER_PUBLISH_QUIET: true
       run: |
-        echo "Running tests with Node $(node -v)"
-        echo "Environment variables set:"
-        env | grep -i TRELLO || true
-        npx @cucumber/cucumber \
+        echo "=== Final Environment Check ==="
+        echo "TRELLO_API_KEY length: ${#TRELLO_API_KEY}"
+        echo "TRELLO_API_TOKEN length: ${#TRELLO_API_TOKEN}"
+        echo "TRELLO_KEY length: ${#TRELLO_KEY}"
+        echo "TRELLO_TOKEN length: ${#TRELLO_TOKEN}"
+        echo "TRELLO_API_KEY_VAR length: ${#TRELLO_API_KEY_VAR}"
+        echo "TRELLO_API_TOKEN_VAR length: ${#TRELLO_API_TOKEN_VAR}"
+        echo "TRELLO_API_KEY_ENV length: ${#TRELLO_API_KEY_ENV}"
+        echo "TRELLO_API_TOKEN_ENV length: ${#TRELLO_API_TOKEN_ENV}"
+        
+        echo "\n=== Running Tests ==="
+        echo "Running with Node $(node -v)"
+        npx cucumber-js \
           --format json:cucumber_report.json \
           --require features/step_definitions/**/*.js \
           --require features/support/**/*.js \
           features/**/*.feature
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: cucumber-report
+        path: cucumber_report.json
 
     - name: Archive test results
       if: always()
