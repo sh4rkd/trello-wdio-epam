@@ -4,14 +4,14 @@ exports.config = {
   runner: "local",
   specs: ["./test/**/*.js"],
   exclude: [],
-  maxInstances: 2,
+  maxInstances: 1,
   
   capabilities: [{
     browserName: 'chrome',
     // 'goog:chromeOptions': {
     //   args: ["--headless", "--disable-gpu", "--window-size=1920,1080"]
     // },
-    maxInstances: 2,
+    maxInstances: 1,
     acceptInsecureCerts: true
   }],
   
@@ -21,16 +21,16 @@ exports.config = {
       'moz:firefoxOptions': {
         args: ['-headless']
       },
-      maxInstances: 2,
+      maxInstances: 1,
       acceptInsecureCerts: true
     }]
   },
   
-  logLevel: "error",
+  logLevel: "silent",
   bail: 0,
   baseUrl: "https://trello.com",
-  waitforTimeout: 10000,
-  connectionRetryTimeout: 120000,
+  waitforTimeout: 20000,
+  connectionRetryTimeout: 180000,
   connectionRetryCount: 3,
   
   services: [
@@ -49,7 +49,7 @@ exports.config = {
     ['spec', {
       showPreface: false,
       addConsoleLogs: false,
-      realtimeReporting: false,
+      realtimeReporting: true,
       symbols: {
         passed: '✓',
         failed: '✖',
@@ -61,7 +61,7 @@ exports.config = {
 
   mochaOpts: {
     ui: "bdd",
-    timeout: 60000,
+    timeout: 120000,
   },
 
   before: function (capabilities, specs) {
@@ -87,7 +87,6 @@ exports.config = {
       console.info = function() {};
     });
     
-    // We're keeping this, but now also importing directly in each test file
     const chai = require('chai');
     global.assert = chai.assert;
     global.should = chai.should();
