@@ -40,7 +40,7 @@ describe('Trello User Registration', () => {
    */
   it('should access registration page', async () => {
     console.log('▶️ TEST: Registration page access');
-    
+
     console.log('⏳ Clicking signup button...');
     await SignupPage.signupButton.clickWithWait({ timeout: 5000 });
     console.log('✅ Signup button clicked');
@@ -53,7 +53,7 @@ describe('Trello User Registration', () => {
     const isDisplayed = await SignupPage.signupPage.isDisplayed();
     assert.isTrue(isDisplayed, 'Signup page should be displayed');
     console.log('✅ Signup page visibility confirmed');
-    
+
     console.log('✅ Test completed successfully');
   });
 
@@ -63,19 +63,19 @@ describe('Trello User Registration', () => {
    */
   it('first registration attempt (triggers reCAPTCHA)', async () => {
     console.log('▶️ TEST: First registration attempt (reCAPTCHA)');
-    
+
     const email = generateRandomEmail();
     console.log(`ℹ️ Generated test email: ${email}`);
-    
+
     console.log('⏳ Attempting registration with generated email...');
     await SignupPage.register(email);
     console.log('✅ Registration form submitted');
-    
+
     await browser.pause(1000);
 
     console.log('⏳ Checking for redirection to team creation page...');
     const redirectedToCreateTeam = await SignupPage.isRedirectedToCreateTeam();
-    
+
     if (redirectedToCreateTeam) {
       console.log('ℹ️ Redirected to create-first-team page - stopping test');
       redirectedToCreateTeam.should.be.true;
@@ -96,7 +96,7 @@ describe('Trello User Registration', () => {
       console.log('⚠️ No reCAPTCHA and no redirection to create-first-team page - skipping test');
       this.skip();
     }
-    
+
     console.log('✅ Test completed successfully');
   });
 
@@ -106,14 +106,14 @@ describe('Trello User Registration', () => {
    */
   it('second registration attempt (check successful registration)', async () => {
     console.log('▶️ TEST: Second registration attempt (completion check)');
-    
+
     const email = generateRandomEmail();
     console.log(`ℹ️ Generated test email: ${email}`);
-    
+
     console.log('⏳ Attempting registration with generated email...');
     await SignupPage.register(email);
     console.log('✅ Registration form submitted');
-    
+
     await browser.pause(1000);
 
     // First check if redirected to create-first-team page
@@ -146,7 +146,7 @@ describe('Trello User Registration', () => {
     expect(fullMessage).to.not.be.empty;
     expect(fullMessage.toLowerCase()).to.include('email');
     console.log('✅ Email verification banner validation passed');
-    
+
     console.log('✅ Test completed successfully');
   });
 

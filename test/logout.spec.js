@@ -30,7 +30,7 @@ describe('Trello Session Management', () => {
   let userBoardsUrl;
 
   /**
-   * Setup before each test 
+   * Setup before each test
    * Logs in to Trello and captures the user's boards URL for later verification
    */
   beforeEach(async () => {
@@ -63,7 +63,7 @@ describe('Trello Session Management', () => {
    */
   it('should securely terminate session', async () => {
     console.log('▶️ TEST: Logout and session termination');
-    
+
     console.log('⏳ Performing logout...');
     await LogoutPage.logout();
     console.log('✅ Logout completed');

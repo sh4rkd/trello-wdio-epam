@@ -23,7 +23,7 @@ const TEST_USER = {
 
 /**
  * Test suite for Trello profile management functionality
- * Tests include navigating to profile settings, updating username, 
+ * Tests include navigating to profile settings, updating username,
  * handling existing username errors, and updating user bio
  */
 describe('Trello Profile Management', () => {
@@ -40,10 +40,10 @@ describe('Trello Profile Management', () => {
     await LoginPage.open();
     await LoginPage.login(TEST_USER.email, TEST_USER.password);
     console.log('✅ Successfully logged in');
-    
+
     await LoginPage.boardDashboard.waitForDisplayed({ timeout: 20000 });
     console.log('✅ Dashboard loaded successfully');
-    
+
     currentUsername = await ProfilePage.getCurrentUsername();
     console.log(`ℹ️ Current username: ${currentUsername}`);
   });
