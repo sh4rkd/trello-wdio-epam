@@ -1,7 +1,14 @@
 const Page = require('../../../core/page');
 const { Button, Input, Element } = require('../../../core/elements');
 
+/**
+ * Page object representing the Trello Profile page.
+ * Provides methods to interact with profile settings and manage user information.
+ */
 class ProfilePage extends Page {
+  /**
+   * Initializes all elements needed for profile page interaction
+   */
   constructor() {
     super();
     this.profileIcon = new Button(
@@ -50,7 +57,7 @@ class ProfilePage extends Page {
 
       const href = await this.userProfileLink.getAttribute('href');
 
-      // Extraer el nombre de usuario sin incluir /boards al final
+      // Extract username without including /boards at the end
       const match = href.match(/\/u\/([^\/]+)/);
 
       if (match && match[1]) {
@@ -61,7 +68,7 @@ class ProfilePage extends Page {
           return text.trim();
         }
 
-        throw new Error('No se pudo extraer nombre de usuario del enlace de perfil');
+        throw new Error('Could not extract username from profile link');
       }
     } catch (error) {
       throw error;
@@ -69,56 +76,57 @@ class ProfilePage extends Page {
   }
 
   /**
-   * Navegación a la configuración del perfil del usuario
-   * Ahora usa navegación directa a la URL en lugar de menús
+   * Navigates to the user's profile settings page
+   * Uses direct URL navigation instead of menus for more reliable access
+   * @returns {Promise<void>}
    */
   async navigateToProfileSettings() {
     try {
       let username = '';
 
       try {
-        // Primero intentamos obtener el nombre de usuario actual
+        // First try to get the current username
         username = await this.getCurrentUsername();
       } catch (error) {
-        // Si falla, intentamos obtenerlo de la URL actual
+        // If that fails, try to extract it from the current URL
         const currentUrl = await browser.getUrl();
 
         const urlMatch = currentUrl.match(/\/u\/([^\/]+)/);
         if (urlMatch && urlMatch[1]) {
           username = urlMatch[1];
         } else {
-          throw new Error('No se pudo obtener el nombre de usuario para la navegación');
+          throw new Error('Could not obtain username for navigation');
         }
       }
 
-      // Navegamos directamente a la URL del perfil
+      // Navigate directly to the profile URL
       const profileUrl = `/u/${username}`;
       await browser.url(profileUrl);
 
-      // Esperamos a que la página se cargue
+      // Wait for the page to load
       await browser.pause(3000);
 
-      // Verificamos si la URL contiene el nombre de usuario
+      // Verify the URL contains the username
       const currentUrl = await browser.getUrl();
       if (!currentUrl.includes(`/u/${username}`)) {
-        throw new Error(`La navegación a ${profileUrl} falló`);
+        throw new Error(`Navigation to ${profileUrl} failed`);
       }
 
-      // Intentamos esperar a que el formulario de perfil sea visible
+      // Try to wait for the profile form to be visible
       try {
         await this.profileForm.waitForDisplayed({ timeout: 15000 });
       } catch (formError) {
-        // Tomamos una captura de pantalla para depurar
+        // Take a screenshot for debugging
         await browser.saveScreenshot('./profile-form-error.png');
 
-        // No lanzamos el error para permitir que la prueba continúe
+        // Don't throw the error to allow the test to continue
       }
     } catch (error) {
-      // Intentar tomar una captura de pantalla para depurar
+      // Try to take a screenshot for debugging
       try {
         await browser.saveScreenshot('./error-profile-navigation.png');
       } catch (screenshotError) {
-        // Ignoramos errores al tomar capturas de pantalla
+        // Ignore errors when taking screenshots
       }
 
       throw error;
@@ -126,8 +134,9 @@ class ProfilePage extends Page {
   }
 
   /**
-   * Actualiza el nombre de usuario
-   * @param {string} username - Nuevo nombre de usuario
+   * Updates the username in profile settings
+   * @param {string} username - New username to set
+   * @returns {Promise<void>}
    */
   async updateUsername(username) {
     try {
@@ -142,8 +151,9 @@ class ProfilePage extends Page {
   }
 
   /**
-   * Actualiza la biografía del usuario
-   * @param {string} bioText - Nuevo texto de biografía
+   * Updates the user's biography in profile settings
+   * @param {string} bioText - New biography text to set
+   * @returns {Promise<void>}
    */
   async updateBio(bioText) {
     try {
@@ -158,8 +168,8 @@ class ProfilePage extends Page {
   }
 
   /**
-   * Obtiene el mensaje de error de nombre de usuario
-   * @returns {Promise<string>} Mensaje de error
+   * Gets the error message when attempting to use an invalid username
+   * @returns {Promise<string>} Error message text
    */
   async getErrorMessage() {
     try {
@@ -171,8 +181,8 @@ class ProfilePage extends Page {
   }
 
   /**
-   * Verifica si la confirmación de guardado se muestra
-   * @returns {Promise<boolean>} True si la confirmación es visible
+   * Checks if the save confirmation message is displayed
+   * @returns {Promise<boolean>} True if the confirmation is visible
    */
   async isConfirmationDisplayed() {
     try {
@@ -184,8 +194,8 @@ class ProfilePage extends Page {
   }
 
   /**
-   * Verifica si el formulario de perfil es visible
-   * @returns {Promise<boolean>} True si el formulario es visible
+   * Checks if the profile form is visible
+   * @returns {Promise<boolean>} True if the form is visible
    */
   async isProfileFormVisible() {
     try {
@@ -197,7 +207,8 @@ class ProfilePage extends Page {
   }
 
   /**
-   * Abre la página de configuración de perfil del usuario actual
+   * Opens the current user's profile settings page
+   * @returns {Promise<void>}
    */
   async open() {
     try {
