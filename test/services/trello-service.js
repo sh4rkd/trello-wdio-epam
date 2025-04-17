@@ -1,7 +1,15 @@
 const axios = require('axios');
 const config = require('../config/api-config');
 
+/**
+ * Service for interacting with the Trello API
+ * Handles all HTTP requests to Trello's REST API endpoints
+ */
 class TrelloService {
+  /**
+   * Initialize Trello service with credentials and base configuration
+   * @throws {Error} If API credentials are missing
+   */
   constructor() {
     this.baseUrl = config.baseUrl;
     this.apiKey = config.apiKey;
@@ -9,7 +17,9 @@ class TrelloService {
     this.headers = config.headers;
 
     if (!this.apiKey || !this.token) {
-      throw new Error('Missing Trello API credentials. Please set TRELLO_API_KEY and TRELLO_API_TOKEN in your .env file.');
+      throw new Error(
+        'Missing Trello API credentials. Please set TRELLO_API_KEY and TRELLO_API_TOKEN in your .env file.'
+      );
     }
   }
 
@@ -21,29 +31,33 @@ class TrelloService {
    */
   async createBoard(name, options = {}) {
     try {
-      console.log(`Creating a new board with name: "${name}"`);
+      console.log(`🔨 Creating a new board with name: "${name}"`);
       if (options.desc) {
-        console.log(`Board description: "${options.desc}"`);
+        console.log(`📝 Board description: "${options.desc}"`);
       }
-      
+
       const params = {
         key: this.apiKey,
         token: this.token,
         name,
-        ...options
+        ...options,
       };
-      
+
+      console.log(`⏳ Sending POST request to ${this.baseUrl}/boards`);
       const response = await axios({
         method: 'post',
         url: `${this.baseUrl}/boards`,
         params,
-        headers: this.headers
+        headers: this.headers,
       });
-      
-      console.log(`Board created successfully: "${name}" with ID: ${response.data.id}`);
+
+      console.log(`✅ Board created successfully: "${name}" with ID: ${response.data.id}`);
       return response;
     } catch (error) {
-      console.error(`Error creating board "${name}":`, error.response ? `${error.response.status} - ${error.response.statusText}` : error.message);
+      console.error(
+        `❌ Error creating board "${name}":`,
+        error.response ? `${error.response.status} - ${error.response.statusText}` : error.message
+      );
       throw error;
     }
   }
@@ -56,25 +70,29 @@ class TrelloService {
    */
   async getBoard(boardId, options = {}) {
     try {
-      console.log(`Retrieving board with ID: ${boardId}`);
-      
+      console.log(`🔍 Retrieving board with ID: ${boardId}`);
+
       const params = {
         key: this.apiKey,
         token: this.token,
-        ...options
+        ...options,
       };
-      
+
+      console.log(`⏳ Sending GET request to ${this.baseUrl}/boards/${boardId}`);
       const response = await axios({
         method: 'get',
         url: `${this.baseUrl}/boards/${boardId}`,
         params,
-        headers: this.headers
+        headers: this.headers,
       });
-      
-      console.log(`Successfully retrieved board: "${response.data.name}" (ID: ${boardId})`);
+
+      console.log(`✅ Successfully retrieved board: "${response.data.name}" (ID: ${boardId})`);
       return response;
     } catch (error) {
-      console.error(`Error retrieving board ${boardId}:`, error.response ? `${error.response.status} - ${error.response.statusText}` : error.message);
+      console.error(
+        `❌ Error retrieving board ${boardId}:`,
+        error.response ? `${error.response.status} - ${error.response.statusText}` : error.message
+      );
       throw error;
     }
   }
@@ -87,30 +105,34 @@ class TrelloService {
    */
   async updateBoard(boardId, updateData) {
     try {
-      console.log(`Updating board with ID: ${boardId}`);
-      console.log('Update data:', JSON.stringify(updateData));
-      
+      console.log(`🔄 Updating board with ID: ${boardId}`);
+      console.log(`📋 Update data: ${JSON.stringify(updateData)}`);
+
       const params = {
         key: this.apiKey,
         token: this.token,
-        ...updateData
+        ...updateData,
       };
-      
+
+      console.log(`⏳ Sending PUT request to ${this.baseUrl}/boards/${boardId}`);
       const response = await axios({
         method: 'put',
         url: `${this.baseUrl}/boards/${boardId}`,
         params,
-        headers: this.headers
+        headers: this.headers,
       });
-      
-      console.log(`Board successfully updated to: "${response.data.name}" (ID: ${boardId})`);
+
+      console.log(`✅ Board successfully updated to: "${response.data.name}" (ID: ${boardId})`);
       if (response.data.desc) {
-        console.log(`New description: "${response.data.desc}"`);
+        console.log(`📝 New description: "${response.data.desc}"`);
       }
-      
+
       return response;
     } catch (error) {
-      console.error(`Error updating board ${boardId}:`, error.response ? `${error.response.status} - ${error.response.statusText}` : error.message);
+      console.error(
+        `❌ Error updating board ${boardId}:`,
+        error.response ? `${error.response.status} - ${error.response.statusText}` : error.message
+      );
       throw error;
     }
   }
@@ -122,24 +144,28 @@ class TrelloService {
    */
   async deleteBoard(boardId) {
     try {
-      console.log(`Deleting board with ID: ${boardId}`);
-      
+      console.log(`🗑️ Deleting board with ID: ${boardId}`);
+
       const params = {
         key: this.apiKey,
-        token: this.token
+        token: this.token,
       };
-      
+
+      console.log(`⏳ Sending DELETE request to ${this.baseUrl}/boards/${boardId}`);
       const response = await axios({
         method: 'delete',
         url: `${this.baseUrl}/boards/${boardId}`,
         params,
-        headers: this.headers
+        headers: this.headers,
       });
-      
-      console.log(`Board successfully deleted (ID: ${boardId})`);
+
+      console.log(`✅ Board successfully deleted (ID: ${boardId})`);
       return response;
     } catch (error) {
-      console.error(`Error deleting board ${boardId}:`, error.response ? `${error.response.status} - ${error.response.statusText}` : error.message);
+      console.error(
+        `❌ Error deleting board ${boardId}:`,
+        error.response ? `${error.response.status} - ${error.response.statusText}` : error.message
+      );
       throw error;
     }
   }

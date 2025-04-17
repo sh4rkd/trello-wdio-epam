@@ -11,27 +11,32 @@ This project implements an automated testing framework for the Trello REST API u
 ## Installation
 
 1. Clone this repository:
+
 ```bash
 git clone https://github.com/sh4rkd/trello-wdio-epam.git
 cd trello-wdio-epam
 ```
 
 2. Switch to the api-testing branch:
+
 ```bash
 git checkout api-testing
 ```
 
 3. Install dependencies:
+
 ```bash
 npm install
 ```
 
 4. Set up your environment variables:
+
 ```bash
 cp .env.example .env
 ```
 
 5. Edit the `.env` file with your Trello API credentials:
+
 ```
 TRELLO_API_KEY=your_api_key_here
 TRELLO_API_TOKEN=your_api_token_here
@@ -81,6 +86,7 @@ The framework covers the following API operations:
    - Delete a board
 
 Each test includes assertions for:
+
 - HTTP status codes
 - Response headers
 - Response body validation
@@ -126,6 +132,7 @@ The `ResponseValidator` utility provides methods to validate API responses:
 ## Error Handling
 
 The framework implements comprehensive error handling:
+
 - Detailed error messages
 - API error response logging
 - Test skipping when credentials are missing

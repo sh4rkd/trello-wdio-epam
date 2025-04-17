@@ -1,5 +1,9 @@
 const { expect } = require('chai');
 
+/**
+ * Utility class for validating API responses
+ * Provides methods to verify response status, headers, and body content
+ */
 class ResponseValidator {
   /**
    * Validates basic response properties
@@ -7,13 +11,17 @@ class ResponseValidator {
    * @param {number} expectedStatus - Expected status code
    */
   static validateBasicResponse(response, expectedStatus = 200) {
-    console.log(`Validating response: Status code is ${response.status} (expected ${expectedStatus})`);
+    console.log(
+      `🔍 Validating response: Status code is ${response.status} (expected ${expectedStatus})`
+    );
     expect(response.status, `Status code should be ${expectedStatus}`).to.equal(expectedStatus);
-    
-    console.log(`Validating Content-Type header: ${response.headers['content-type']}`);
-    expect(response.headers['content-type'], 'Content-Type header should be JSON').to.include('application/json');
-    
-    console.log('Basic response validation passed ✓');
+
+    console.log(`🔍 Validating Content-Type header: ${response.headers['content-type']}`);
+    expect(response.headers['content-type'], 'Content-Type header should be JSON').to.include(
+      'application/json'
+    );
+
+    console.log('✅ Basic response validation passed');
   }
 
   /**
@@ -22,21 +30,21 @@ class ResponseValidator {
    * @param {Object} expectedProps - Expected properties in {key: value} format
    */
   static validateResponseProperties(responseBody, expectedProps) {
-    console.log('Validating response body properties:');
-    
+    console.log('🔍 Validating response body properties:');
+
     for (const [key, value] of Object.entries(expectedProps)) {
-      console.log(`  - Checking property "${key}"`);
+      console.log(`  • Checking property "${key}"`);
       expect(responseBody, `Response should have property ${key}`).to.have.property(key);
-      
+
       if (value !== undefined) {
-        console.log(`  - Validating "${key}" value: "${responseBody[key]}" (expected: "${value}")`);
+        console.log(`  • Validating "${key}" value: "${responseBody[key]}" (expected: "${value}")`);
         expect(responseBody[key], `Property ${key} should have value ${value}`).to.equal(value);
       } else {
-        console.log(`  - Property "${key}" exists with value: "${responseBody[key]}"`);
+        console.log(`  • Property "${key}" exists with value: "${responseBody[key]}"`);
       }
     }
-    
-    console.log('Response body validation passed ✓');
+
+    console.log('✅ Response body validation passed');
   }
 }
 
