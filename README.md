@@ -171,3 +171,52 @@ The framework follows these design principles:
 
 - Make sure you have Node.js and npm installed before starting.
 - This project specifically uses Chai 4.3.7 due to compatibility requirements with CommonJS modules. Chai 5.x and above are ES modules and would require different import syntax.
+
+## Linters and Code Formatting
+
+This project uses ESLint and Prettier for code quality and consistency.
+
+### Verify code formatting with Prettier
+
+```bash
+npm run prettier
+```
+
+### Format code automatically with Prettier
+
+```bash
+npm run prettier:fix
+```
+
+### Verify code with ESLint
+
+```bash
+npm run lint
+```
+
+### Fix issues detected by ESLint
+
+```bash
+npm run lint:fix
+```
+
+### Format and fix in one command
+
+```bash
+npm run format
+```
+
+## Continuous Integration
+
+This project includes a Jenkinsfile to configure a CI pipeline. The stages include:
+
+1. Code checkout
+2. Dependency installation
+3. Linter execution (Prettier and ESLint)
+4. Test execution
+
+To run the local CI job:
+
+```bash
+npm run ci
+```

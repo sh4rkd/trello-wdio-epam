@@ -3,7 +3,7 @@ const Button = require('./button');
 const Input = require('./input');
 
 module.exports = {
-    Element,
-    Button,
-    Input
+  Element,
+  Button,
+  Input,
 };
