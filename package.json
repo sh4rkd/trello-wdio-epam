@@ -29,7 +29,7 @@
     "@wdio/mocha-framework": "^7.16.11",
     "@wdio/spec-reporter": "^7.16.11",
     "chai": "^4.3.7",
-    "chromedriver": "latest",
+    "chromedriver": "^135.0.2",
     "dotenv": "^16.4.7",
     "geckodriver": "latest",
     "wdio-chromedriver-service": "^7.2.6",
