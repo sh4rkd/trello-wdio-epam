@@ -8,7 +8,7 @@
     "test:cucumber": "cucumber-js",
     "test:parallel": "cucumber-js --parallel 2",
     "test:tags": "cucumber-js --tags",
-    "test:report": "cucumber-js --format json:cucumber_report.json && node scripts/generate-report.js",
+    "test:report": "cucumber-js --format json:cucumber_report.json",
     "test:ci": "cucumber-js --format json:cucumber_report.json --parallel 2",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

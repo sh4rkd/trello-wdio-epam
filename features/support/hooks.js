@@ -31,7 +31,7 @@ BeforeAll(function () {
 Before(async function () {
   console.log('Setting up new test scenario');
 
-  if (!process.env.TRELLO_API_KEY || !process.env.TRELLO_TOKEN) {
+  if (!process.env.TRELLO_API_KEY || !process.env.TRELLO_API_TOKEN) {
     console.error('Trello API credentials are not configured');
     throw new Error('Trello API credentials are not configured');
   }
