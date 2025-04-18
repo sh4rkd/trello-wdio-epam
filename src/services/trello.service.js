@@ -19,9 +19,11 @@ class TrelloService extends BaseService {
    * @description Initializes the TrelloService with API credentials
    */
   constructor() {
+    console.log('Initializing TrelloService');
     super();
     this.apiKey = config.trello.apiKey;
     this.token = config.trello.token;
+    console.log('TrelloService initialized with API credentials');
   }
 
   /**
@@ -34,6 +36,7 @@ class TrelloService extends BaseService {
    * @throws {ApiError} When the board creation fails
    */
   async createBoard(name, options = {}) {
+    console.log(`Creating new Trello board with name: "${name}"`);
     const params = {
       key: this.apiKey,
       token: this.token,
@@ -49,6 +52,7 @@ class TrelloService extends BaseService {
    * @throws {ApiError} When the board is not found or request fails
    */
   async getBoard(boardId) {
+    console.log(`Fetching details for board with ID: ${boardId}`);
     const params = {
       key: this.apiKey,
       token: this.token,
@@ -66,6 +70,7 @@ class TrelloService extends BaseService {
    * @throws {ApiError} When the board update fails
    */
   async updateBoard(boardId, data) {
+    console.log(`Updating board with ID: ${boardId}`, data);
     const params = {
       key: this.apiKey,
       token: this.token,
@@ -80,6 +85,7 @@ class TrelloService extends BaseService {
    * @throws {ApiError} When the board deletion fails
    */
   async deleteBoard(boardId) {
+    console.log(`Deleting board with ID: ${boardId}`);
     const params = {
       key: this.apiKey,
       token: this.token,
@@ -94,6 +100,7 @@ class TrelloService extends BaseService {
    * @throws {ApiError} When the lists retrieval fails
    */
   async getBoardLists(boardId) {
+    console.log(`Fetching lists for board with ID: ${boardId}`);
     const params = {
       key: this.apiKey,
       token: this.token,
@@ -108,6 +115,7 @@ class TrelloService extends BaseService {
    * @throws {ApiError} When the cards retrieval fails
    */
   async getBoardCards(boardId) {
+    console.log(`Fetching cards for board with ID: ${boardId}`);
     const params = {
       key: this.apiKey,
       token: this.token,
@@ -122,6 +130,7 @@ class TrelloService extends BaseService {
    * @throws {ApiError} When the checklists retrieval fails
    */
   async getBoardChecklists(boardId) {
+    console.log(`Fetching checklists for board with ID: ${boardId}`);
     const params = {
       key: this.apiKey,
       token: this.token,
@@ -136,6 +145,7 @@ class TrelloService extends BaseService {
    * @throws {ApiError} When the members retrieval fails
    */
   async getBoardMembers(boardId) {
+    console.log(`Fetching members for board with ID: ${boardId}`);
     const params = {
       key: this.apiKey,
       token: this.token,
@@ -151,6 +161,7 @@ class TrelloService extends BaseService {
    * @throws {ApiError} When the list creation fails
    */
   async createList(boardId, name) {
+    console.log(`Creating new list "${name}" on board with ID: ${boardId}`);
     const params = {
       key: this.apiKey,
       token: this.token,

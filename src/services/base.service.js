@@ -18,6 +18,7 @@ class BaseService {
    * @param {number} options.timeout - Request timeout
    */
   constructor(options = {}) {
+    console.log('Initializing BaseService with configuration');
     this.client = axios.create({
       baseURL: options.baseURL || config.trello.baseUrl,
       timeout: options.timeout || config.trello.defaultTimeout,
@@ -25,6 +26,7 @@ class BaseService {
         'Content-Type': 'application/json',
       },
     });
+    console.log(`BaseService initialized with baseURL: ${options.baseURL || config.trello.baseUrl}`);
   }
 
   /**
@@ -34,10 +36,13 @@ class BaseService {
    * @returns {Promise<Object>} Request response
    */
   async get(url, params = {}) {
+    console.log(`Making GET request to: ${url}`);
     try {
       const response = await this.client.get(url, { params });
+      console.log(`GET request to ${url} successful with status: ${response.status}`);
       return response;
     } catch (error) {
+      console.error(`GET request to ${url} failed`);
       this.handleError(error);
     }
   }
@@ -50,10 +55,13 @@ class BaseService {
    * @returns {Promise<Object>} Request response
    */
   async post(url, data = {}, params = {}) {
+    console.log(`Making POST request to: ${url}`);
     try {
       const response = await this.client.post(url, data, { params });
+      console.log(`POST request to ${url} successful with status: ${response.status}`);
       return response;
     } catch (error) {
+      console.error(`POST request to ${url} failed`);
       this.handleError(error);
     }
   }
@@ -66,10 +74,13 @@ class BaseService {
    * @returns {Promise<Object>} Request response
    */
   async put(url, data = {}, params = {}) {
+    console.log(`Making PUT request to: ${url}`);
     try {
       const response = await this.client.put(url, data, { params });
+      console.log(`PUT request to ${url} successful with status: ${response.status}`);
       return response;
     } catch (error) {
+      console.error(`PUT request to ${url} failed`);
       this.handleError(error);
     }
   }
@@ -81,10 +92,13 @@ class BaseService {
    * @returns {Promise<Object>} Request response
    */
   async delete(url, params = {}) {
+    console.log(`Making DELETE request to: ${url}`);
     try {
       const response = await this.client.delete(url, { params });
+      console.log(`DELETE request to ${url} successful with status: ${response.status}`);
       return response;
     } catch (error) {
+      console.error(`DELETE request to ${url} failed`);
       this.handleError(error);
     }
   }
@@ -96,8 +110,10 @@ class BaseService {
    */
   handleError(error) {
     if (error.response) {
+      console.error(`API error: ${error.response.status} - ${error.response.data.message || error.message}`);
       throw new Error(`Error ${error.response.status}: ${error.response.data.message || error.message}`);
     }
+    console.error(`Network error: ${error.message}`);
     throw error;
   }
 }
