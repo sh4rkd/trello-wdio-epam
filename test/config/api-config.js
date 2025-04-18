@@ -9,6 +9,6 @@ module.exports = {
   token: process.env.TRELLO_API_TOKEN,
   headers: {
     'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  }
+    Accept: 'application/json',
+  },
 };

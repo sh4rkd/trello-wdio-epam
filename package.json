@@ -1,54 +1,54 @@
 {
-    "name": "trello-wdio-tests",
-    "version": "1.0.0",
-    "description": "Pruebas automatizadas para la API de Trello usando WebdriverIO y Cucumber",
-    "main": "index.js",
-    "scripts": {
-        "test": "mocha test/api/**/*.js --reporter spec",
-        "test:cucumber": "cucumber-js",
-        "test:parallel": "cucumber-js --parallel 2",
-        "test:tags": "cucumber-js --tags",
-        "test:report": "cucumber-js --format json:cucumber_report.json && node scripts/generate-report.js",
-        "test:ci": "cucumber-js --format json:cucumber_report.json --parallel 2",
-        "lint": "eslint .",
-        "lint:fix": "eslint . --fix",
-        "format": "prettier --write \"**/*.{js,json,feature}\"",
-        "prepare": "husky install"
-    },
-    "keywords": [
-        "trello",
-        "api",
-        "testing",
-        "cucumber",
-        "webdriverio"
+  "name": "trello-wdio-tests",
+  "version": "1.0.0",
+  "description": "Pruebas automatizadas para la API de Trello usando WebdriverIO y Cucumber",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/api/**/*.js --reporter spec",
+    "test:cucumber": "cucumber-js",
+    "test:parallel": "cucumber-js --parallel 2",
+    "test:tags": "cucumber-js --tags",
+    "test:report": "cucumber-js --format json:cucumber_report.json && node scripts/generate-report.js",
+    "test:ci": "cucumber-js --format json:cucumber_report.json --parallel 2",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{js,json}\"",
+    "prepare": "husky install"
+  },
+  "keywords": [
+    "trello",
+    "api",
+    "testing",
+    "cucumber",
+    "webdriverio"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@cucumber/cucumber": "^8.0.0",
+    "axios": "^1.3.4",
+    "chai": "^4.3.7",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "@babel/register": "^7.21.0",
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-cucumber": "^2.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.1",
+    "mocha": "^10.2.0",
+    "prettier": "^2.8.7"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
     ],
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "@cucumber/cucumber": "^8.0.0",
-        "axios": "^1.3.4",
-        "chai": "^4.3.7",
-        "dotenv": "^16.0.3"
-    },
-    "devDependencies": {
-        "@babel/core": "^7.21.4",
-        "@babel/preset-env": "^7.21.4",
-        "@babel/register": "^7.21.0",
-        "eslint": "^8.38.0",
-        "eslint-config-prettier": "^8.8.0",
-        "eslint-plugin-cucumber": "^2.0.0",
-        "husky": "^8.0.3",
-        "lint-staged": "^13.2.1",
-        "mocha": "^10.2.0",
-        "prettier": "^2.8.7"
-    },
-    "lint-staged": {
-        "*.js": [
-            "eslint --fix",
-            "prettier --write"
-        ],
-        "*.{json,feature}": [
-            "prettier --write"
-        ]
-    }
+    "*.json": [
+      "prettier --write"
+    ]
+  }
 }

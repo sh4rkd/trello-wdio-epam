@@ -35,8 +35,10 @@ function isSuccessfulResponse(response) {
  */
 function hasRequiredProperties(obj, requiredProps) {
   console.log(`Checking if object has required properties: ${requiredProps.join(', ')}`);
-  const hasProps = requiredProps.every(prop => obj.hasOwnProperty(prop));
-  console.log(`Required properties check result: ${hasProps ? 'All properties found' : 'Missing properties'}`);
+  const hasProps = requiredProps.every(prop => Object.prototype.hasOwnProperty.call(obj, prop));
+  console.log(
+    `Required properties check result: ${hasProps ? 'All properties found' : 'Missing properties'}`
+  );
   return hasProps;
 }
 
@@ -66,4 +68,4 @@ module.exports = {
   isSuccessfulResponse,
   hasRequiredProperties,
   cleanupTestResources,
-}; 
+};

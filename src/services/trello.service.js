@@ -170,4 +170,4 @@ class TrelloService extends BaseService {
   }
 }
 
-module.exports = new TrelloService(); 
+module.exports = new TrelloService();

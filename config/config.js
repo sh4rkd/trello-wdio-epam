@@ -22,11 +22,17 @@ module.exports = {
   test: {
     retries: 2,
     timeout: 30000,
-    reporters: ['spec', ['allure', {
-      outputDir: 'allure-results',
-      disableWebdriverStepsReporting: true,
-      disableWebdriverScreenshotsReporting: false,
-    }]],
+    reporters: [
+      'spec',
+      [
+        'allure',
+        {
+          outputDir: 'allure-results',
+          disableWebdriverStepsReporting: true,
+          disableWebdriverScreenshotsReporting: false,
+        },
+      ],
+    ],
   },
 
   /**
@@ -39,4 +45,4 @@ module.exports = {
     formatOptions: { snippetInterface: 'async-await' },
     publishQuiet: true,
   },
-}; 
+};

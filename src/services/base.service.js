@@ -26,7 +26,9 @@ class BaseService {
         'Content-Type': 'application/json',
       },
     });
-    console.log(`BaseService initialized with baseURL: ${options.baseURL || config.trello.baseUrl}`);
+    console.log(
+      `BaseService initialized with baseURL: ${options.baseURL || config.trello.baseUrl}`
+    );
   }
 
   /**
@@ -110,12 +112,16 @@ class BaseService {
    */
   handleError(error) {
     if (error.response) {
-      console.error(`API error: ${error.response.status} - ${error.response.data.message || error.message}`);
-      throw new Error(`Error ${error.response.status}: ${error.response.data.message || error.message}`);
+      console.error(
+        `API error: ${error.response.status} - ${error.response.data.message || error.message}`
+      );
+      throw new Error(
+        `Error ${error.response.status}: ${error.response.data.message || error.message}`
+      );
     }
     console.error(`Network error: ${error.message}`);
     throw error;
   }
 }
 
-module.exports = BaseService; 
+module.exports = BaseService;

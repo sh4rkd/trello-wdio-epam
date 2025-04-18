@@ -1,0 +1,9 @@
+node_modules
+dist
+build
+coverage
+.github
+*.feature
+cucumber_report.json
+cucumber-report.html
+allure-results/ 

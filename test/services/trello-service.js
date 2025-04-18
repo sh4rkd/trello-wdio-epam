@@ -9,7 +9,9 @@ class TrelloService {
     this.headers = config.headers;
 
     if (!this.apiKey || !this.token) {
-      throw new Error('Missing Trello API credentials. Please set TRELLO_API_KEY and TRELLO_API_TOKEN in your .env file.');
+      throw new Error(
+        'Missing Trello API credentials. Please set TRELLO_API_KEY and TRELLO_API_TOKEN in your .env file.'
+      );
     }
   }
 
@@ -18,8 +20,8 @@ class TrelloService {
       const response = await axios.get(`${this.baseUrl}/members/me/boards`, {
         params: {
           key: this.apiKey,
-          token: this.token
-        }
+          token: this.token,
+        },
       });
 
       const boards = response.data;
@@ -50,38 +52,41 @@ class TrelloService {
       if (options.desc) {
         console.log(`Board description: "${options.desc}"`);
       }
-      
+
       // Intentar limpiar tableros antiguos si el espacio está lleno
       await this.cleanupBoards();
-      
+
       const url = `${this.baseUrl}/boards`;
       const params = {
         name,
         key: this.apiKey,
         token: this.token,
-        defaultLists: false
+        defaultLists: false,
       };
 
       if (options.desc) {
         params.desc = options.desc;
       }
-      
+
       console.log('Request URL:', url);
       console.log('Request params:', JSON.stringify(params, null, 2));
-      
-      const response = await axios.post(url, null, { 
+
+      const response = await axios.post(url, null, {
         params,
         headers: {
-          'Accept': 'application/json'
-        }
+          Accept: 'application/json',
+        },
       });
-      
+
       console.log('Response:', JSON.stringify(response.data, null, 2));
       console.log(`Board created successfully: "${name}" with ID: ${response.data.id}`);
       return response;
     } catch (error) {
       console.error('Full error:', error);
-      console.error(`Error creating board "${name}":`, error.response ? `${error.response.status} - ${error.response.statusText}` : error.message);
+      console.error(
+        `Error creating board "${name}":`,
+        error.response ? `${error.response.status} - ${error.response.statusText}` : error.message
+      );
       if (error.response) {
         console.error('Error response data:', JSON.stringify(error.response.data, null, 2));
       }
@@ -98,27 +103,30 @@ class TrelloService {
   async getBoard(boardId, options = {}) {
     try {
       console.log(`Retrieving board with ID: ${boardId}`);
-      
+
       const params = {
         key: this.apiKey,
         token: this.token,
-        ...options
+        ...options,
       };
-      
+
       const response = await axios({
         method: 'get',
         url: `${this.baseUrl}/boards/${boardId}`,
         params,
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
       });
-      
+
       console.log(`Successfully retrieved board: "${response.data.name}" (ID: ${boardId})`);
       return response;
     } catch (error) {
-      console.error(`Error retrieving board ${boardId}:`, error.response ? `${error.response.status} - ${error.response.statusText}` : error.message);
+      console.error(
+        `Error retrieving board ${boardId}:`,
+        error.response ? `${error.response.status} - ${error.response.statusText}` : error.message
+      );
       throw error;
     }
   }
@@ -133,31 +141,34 @@ class TrelloService {
     try {
       console.log(`Updating board with ID: ${boardId}`);
       console.log('Update data:', JSON.stringify(updateData));
-      
+
       const params = {
         key: this.apiKey,
         token: this.token,
-        ...updateData
+        ...updateData,
       };
-      
+
       const response = await axios({
         method: 'put',
         url: `${this.baseUrl}/boards/${boardId}`,
         params,
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
       });
-      
+
       console.log(`Board successfully updated to: "${response.data.name}" (ID: ${boardId})`);
       if (response.data.desc) {
         console.log(`New description: "${response.data.desc}"`);
       }
-      
+
       return response;
     } catch (error) {
-      console.error(`Error updating board ${boardId}:`, error.response ? `${error.response.status} - ${error.response.statusText}` : error.message);
+      console.error(
+        `Error updating board ${boardId}:`,
+        error.response ? `${error.response.status} - ${error.response.statusText}` : error.message
+      );
       throw error;
     }
   }
@@ -170,26 +181,29 @@ class TrelloService {
   async deleteBoard(boardId) {
     try {
       console.log(`Deleting board with ID: ${boardId}`);
-      
+
       const params = {
         key: this.apiKey,
-        token: this.token
+        token: this.token,
       };
-      
+
       const response = await axios({
         method: 'delete',
         url: `${this.baseUrl}/boards/${boardId}`,
         params,
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
       });
-      
+
       console.log(`Board successfully deleted (ID: ${boardId})`);
       return response;
     } catch (error) {
-      console.error(`Error deleting board ${boardId}:`, error.response ? `${error.response.status} - ${error.response.statusText}` : error.message);
+      console.error(
+        `Error deleting board ${boardId}:`,
+        error.response ? `${error.response.status} - ${error.response.statusText}` : error.message
+      );
       throw error;
     }
   }

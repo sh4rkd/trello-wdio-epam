@@ -16,4 +16,4 @@ module.exports = {
     apiKey: config.trello.apiKey,
     token: config.trello.token,
   },
-}; 
+};

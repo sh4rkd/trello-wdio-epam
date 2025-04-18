@@ -7,7 +7,11 @@
 const { Given, When, Then, After } = require('@cucumber/cucumber');
 const { expect } = require('chai');
 const trelloService = require('../../src/services/trello.service');
-const { generateUniqueBoardName, isSuccessfulResponse, hasRequiredProperties, cleanupTestResources } = require('../../src/utils/test.utils');
+const {
+  generateUniqueBoardName,
+  isSuccessfulResponse,
+  cleanupTestResources,
+} = require('../../src/utils/test.utils');
 
 // Shared state between steps
 let boardId;
@@ -19,7 +23,7 @@ let listName;
 /**
  * Cleanup hook to remove test resources after each scenario
  */
-After(async function() {
+After(async function () {
   console.log('Running cleanup hook to remove test resources');
   await cleanupTestResources(boardId, trelloService.deleteBoard.bind(trelloService));
 });
@@ -43,7 +47,7 @@ Given('I have a board', async function () {
   boardDescription = 'This is a test board created by automated API tests';
   response = await trelloService.createBoard(boardName, {
     desc: boardDescription,
-    defaultLists: false
+    defaultLists: false,
   });
   boardId = response.data.id;
   console.log(`Test board created with ID: ${boardId}, name: "${boardName}"`);
@@ -55,17 +59,20 @@ Given('I have a board', async function () {
  * @param {string} name - The name for the new board
  * @param {string} description - The description for the new board
  */
-When('I create a new board with name {string} and description {string}', async function (name, description) {
-  console.log(`Creating a new board with name: "${name}" and description: "${description}"`);
-  boardName = name;
-  boardDescription = description;
-  response = await trelloService.createBoard(name, {
-    desc: description,
-    defaultLists: false
-  });
-  boardId = response.data.id;
-  console.log(`Board created with ID: ${boardId}`);
-});
+When(
+  'I create a new board with name {string} and description {string}',
+  async function (name, description) {
+    console.log(`Creating a new board with name: "${name}" and description: "${description}"`);
+    boardName = name;
+    boardDescription = description;
+    response = await trelloService.createBoard(name, {
+      desc: description,
+      defaultLists: false,
+    });
+    boardId = response.data.id;
+    console.log(`Board created with ID: ${boardId}`);
+  }
+);
 
 /**
  * Verifies successful board creation
@@ -113,16 +120,21 @@ Then('I should receive the correct board information', function () {
  * @param {string} newName - The new name for the board
  * @param {string} newDescription - The new description for the board
  */
-When('I update the board with name {string} and description {string}', async function (newName, newDescription) {
-  console.log(`Updating board with ID: ${boardId} to name: "${newName}" and description: "${newDescription}"`);
-  response = await trelloService.updateBoard(boardId, {
-    name: newName,
-    desc: newDescription
-  });
-  boardName = newName;
-  boardDescription = newDescription;
-  console.log('Board update request completed');
-});
+When(
+  'I update the board with name {string} and description {string}',
+  async function (newName, newDescription) {
+    console.log(
+      `Updating board with ID: ${boardId} to name: "${newName}" and description: "${newDescription}"`
+    );
+    response = await trelloService.updateBoard(boardId, {
+      name: newName,
+      desc: newDescription,
+    });
+    boardName = newName;
+    boardDescription = newDescription;
+    console.log('Board update request completed');
+  }
+);
 
 /**
  * Verifies successful board update
@@ -281,4 +293,4 @@ Then('the list should have the correct name', function () {
   console.log('Verifying list has the correct name');
   expect(response.data.name).to.equal(listName);
   console.log('List name verification passed');
-}); 
+});
